@@ -1,0 +1,182 @@
+Adelaide Airport
+Adelaide City
+Airlie Beach
+Albury
+Albury Airport
+Alexandria (Mascot)
+Alice Springs
+Alice Springs Airport
+Armidale
+Armidale Airport
+Artarmon
+Aspley
+Avalon Airport
+Ayers Rock
+Ayers Rock Airport
+Ballarat
+Ballarat Airport
+Ballina
+Ballina Airport
+Bankstown (Revesby)
+Bayswater
+Bendigo
+Blackburn
+Blacktown
+Braybrook
+Brisbane Airport
+Brisbane City
+Brisbane City - Commercials
+Broken Hill
+Broken Hill Airport
+Brookvale
+Broome
+Bunbury
+Bundaberg
+Bundaberg Airport
+Burnie Airport
+Byron Bay
+Caboolture
+Cairns Airport
+Cairns City
+Caloundra
+Campbelltown 
+Canberra Airport
+Canberra Airport 4wd,Bus,Truck
+Canberra City
+Caulfield
+Clayton
+Cleveland
+Coffs Harbour
+Coffs Harbour Airport
+Coolangatta (Gold Coast) Apt
+Cooma
+Cooma - Commercials
+Cooma Airport
+Coorparoo
+Country Club Casino
+Dandenong
+Darra
+Darwin
+Darwin Airport
+Devonport
+Devonport Airport
+Dubbo
+Dubbo Airport
+Emerald
+Exmouth
+Frankston
+Fremantle
+Geelong
+Gladstone
+Gladstone Airport
+Gosford
+Grafton
+Grafton Airport
+Griffifth Airport
+Griffith
+Gunnedah
+Hamilton (VIC)
+Hervey Bay
+Hervey Bay Airport
+Hobart Airport
+Hobart City
+Hoppers Crossing
+Hornsby
+Horsham
+Hyatt Coolum-house guests only
+Inverell
+Ipswich
+Jabiru
+Kalgoorlie
+Kalgoorlie Airport
+Kangaroo Island
+Karratha
+Karratha Airport
+Katherine
+Kununurra
+Launceston
+Launceston Airport
+Laverton
+Leeton
+Lismore
+Lismore Airport
+Liverpool
+Logan
+Mackay
+Mackay Airport
+Maitland
+Maroochydore (City Office)
+Maroochydore Airport
+Maryborough Airport
+Melbourne Airport
+Melbourne City
+Merimbula Airport
+Mildura Airport
+Mittagong
+Monto
+Mooloolaba
+Moorabbin
+Moree
+Mt Gambier
+Mt Gambier Airport
+Muswellbrook
+Nambour
+Narrabri
+Newcastle (Charlestown)
+Newcastle Airport
+Newcastle West
+Newman Airport
+Noosa Heads
+Novotel Twin Waters Resort
+Osborne Park
+Palm Cove-Novotel Resort
+Palm Cove-Paradise Resort
+Paraburdoo
+Parkes
+Parkes Airport
+Parramatta
+Penrith
+Perth
+Perth Airport
+Port Douglas
+Port Hedland
+Port Hedland Airport
+Port Macquarie
+Port Macquarie Airport
+Portland
+Portland Airport
+Preston
+Redcliffe
+Richmond
+Rockhampton
+Rockhampton Airport
+Sale
+Sale Airport
+San Souci (Ramsgate)
+Scone
+Singleton
+South Melbourne
+Surfers Paradise
+Sydney Airport
+Sydney City
+Tamworth
+Tamworth Airport
+Taree
+Taree Airport
+Tennant Creek
+Toowoomba
+Townsville Airport
+Townsville City
+Tullamarine (Mickleham Rd)
+Wagga Wagga 
+Wagga Wagga Airport
+Wangaratta
+Warrnambool
+Weipa Airport
+Welshpool
+West Ryde
+Whitsundays-Laguna Resort
+Wollongong
+Wrest Point Casino
+Wynyard
+Wyong

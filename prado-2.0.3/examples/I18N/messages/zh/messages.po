@@ -1,0 +1,45 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I18N Tests\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2005-01-09 16:01:49\n"
+"Last-Translator: \n"
+"Language-Team: Wei Zhuo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: F:\\www\\prado\\framework\\I18N\\	ests\n"
+
+msgid "Reload"
+msgstr "重来"
+
+msgid "PRADO Translation Editor"
+msgstr "PRADO翻译编辑器"
+
+msgid "Source:"
+msgstr "来源:"
+
+msgid "Type:"
+msgstr "类型："
+
+msgid "Catalogue:"
+msgstr "目录："
+
+msgid "Original string"
+msgstr "原始字串"
+
+msgid "Translation"
+msgstr "翻译结果"
+
+msgid "Copyrights 2005 Xiang Wei Zhuo. All right reserved."
+msgstr "Copyrights 2005 Xiang Wei Zhuo. All right reserved."
+
+msgid "Internationlization in PRADO"
+msgstr "PRADO国际化"
+
+msgid "Update Translation"
+msgstr "更新翻译"
+
+msgid "System error, unable to update translation."
+msgstr "系统错误，无法更新翻译。"
+

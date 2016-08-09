@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+<!-- @author $Author: weizhuo $ -->
+<!-- @version $Id: messages.zh.xml,v 1.5 2005/01/26 05:56:45 weizhuo Exp $ -->
+<file orginal="Prado Translation Editor" source-language="EN" datatype="plaintext" date="2005-01-23T18:05:56Z">
+<body>
+
+<trans-unit id="1">
+<source>PRADO Translation Editor</source>
+<target>PRADO&#x7FFB;&#x8BD1;&#x7F16;&#x8F91;&#x5668;</target>
+</trans-unit>
+
+<trans-unit id="2">
+<source>Source:</source>
+<target>&#x6765;&#x6E90;:</target>
+</trans-unit>
+
+<trans-unit id="3">
+<source>Type:</source>
+<target>&#x7C7B;&#x578B;&#xFF1A;</target>
+</trans-unit>
+
+<trans-unit id="4">
+<source>Catalogue:</source>
+<target>&#x76EE;&#x5F55;&#xFF1A;</target>
+</trans-unit>
+
+<trans-unit id="5">
+<source>Original string</source>
+<target>&#x539F;&#x59CB;&#x5B57;&#x4E32;</target>
+</trans-unit>
+
+<trans-unit id="6">
+<source>Translation</source>
+<target>&#x7FFB;&#x8BD1;&#x7ED3;&#x679C;</target>
+</trans-unit>
+
+<trans-unit id="7">
+<source>Copyrights 2005 Xiang Wei Zhuo. All right reserved.</source>
+<target>Copyrights 2005 &#x5353;&#x7965;&#x4F1F;. All right reserved.</target>
+</trans-unit>
+
+<trans-unit id="8">
+<source>Internationlization in PRADO</source>
+<target>PRADO&#x56FD;&#x9645;&#x5316;</target>
+</trans-unit>
+
+<trans-unit id="9">
+<source>Update Translation</source>
+<target>&#x66F4;&#x65B0;&#x7FFB;&#x8BD1;</target>
+</trans-unit>
+
+<trans-unit id="10">
+<source>System error, unable to update translation.</source>
+<target>&#x7CFB;&#x7EDF;&#x9519;&#x8BEF;&#xFF0C;&#x65E0;&#x6CD5;&#x66F4;&#x65B0;&#x7FFB;&#x8BD1;&#x3002;</target>
+</trans-unit>
+
+<trans-unit id="11">
+<source>Reload</source>
+<target>&#x91CD;&#x6765;</target>
+</trans-unit>
+</body>
+</file>
+</xliff>

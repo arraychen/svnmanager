@@ -1,0 +1,65 @@
+
+html
+{
+	background-color: #E5E8EA;
+	background-image: url(left.gif);
+	background-repeat: repeat-y;
+	background-position: center;
+}
+
+body
+{
+	padding: 2em 3em 3em 3em;
+	font-family: Georgia,"Times New Roman", Times, serif;
+	width: 37em;
+	margin: 0 auto;
+	background-color: white;
+	line-height: 125%;
+	background-image: url(right.gif);
+	background-repeat: repeat-y;
+	background-position: right;
+}
+
+tt
+{
+	color: #800;
+}
+
+pre
+{
+	font-size: 12px;
+	font-family: "Courier New", Courier, monospace;
+	border: 1px solid #DCDCDC;
+	padding: 1.5em;
+	background-color: #F0F8FF;
+}
+
+dd
+{
+}
+
+table
+{
+	border-collapse: collapse;	
+}
+td
+{
+	padding: 0.5em;
+}
+
+img
+{
+	border: 1px solid #C6CCD2;
+}
+
+a:hover, a:hover tt
+{
+	color: #f00;
+}
+
+#author
+{
+	border: 1px solid #DCDCDC;
+	padding: 1.5em;
+	background-color: #F0F8FF;
+}

@@ -1,0 +1,71 @@
+<?php
+//
+//  SVNManager config.php file for Linux based servers
+//
+
+//You can find the available localizations in a linux shell by typing: locale -a
+//
+//Warning: Please set this correct if you want to support exotic repository names 
+$lang						= "en_US.UTF-8";
+
+//Shell command's
+$htpassword_cmd 			= 	"/usr/bin/htpasswd";
+$svn_cmd 					= 	"/usr/bin/svn";
+$svnadmin_cmd 				= 	"/usr/bin/svnadmin";
+
+//Subversion locations
+$svn_config_dir				=	"/var/www/svnconfig";
+$svn_repos_loc 				= 	"/var/www/repos";
+$svn_passwd_file 			= 	"/var/www/repos/passwdfile";
+$svn_access_file 			= 	"/var/www/repos/accessfile";
+
+//If the following is set, removing a repository will cause it to be
+//moved to this location rather than being deleted.
+$svn_trash_loc				=	"";
+
+// If $svnserve_user_file is defined, then SVNManager will create a
+// user/password file suitable for use with SVNSERVE
+//
+// When not set, this feature isn't enabled.
+//
+// Warning: When enabled, this mode requires that passwords are stored in the database readable!
+// 
+// Note: When is feature is enabled later, passwords need to be re-set before they are included in
+//  	 the svnserve user file.
+//
+//$svnserve_user_file		=	"/var/www/repos/svnserve_passwd_file"; 
+$svnserve_user_file="";
+
+//SMTP Server for outgoing mail
+$smtp_server 			= 	"smtp.mailserver.net";
+
+//Data Source Name (only tested with mysql and sqlite!!)
+//
+//A database will be automatically created when SVNManager is first started, if you 
+//make sure that the credentials have database creation rights!
+//
+//An empty SQLite database will automatically be generated with the first
+//startup!
+//
+//Please note that if you change the directory for a SQLite database that you
+//choose a location that is not accessible via web!!
+//
+
+$dsn				= 	"mysqli://username:password@hostname/databasename";
+
+//The following location for SQLite is not readable from internet by means of an .htaccess file
+//$dsn		    	=	"sqlite://svnmanager/svnmanager.db";  
+
+//Administrator account (only for first time use, when you create an admin user this account will be unusable)
+$admin_name						=	"admin";
+$admin_temp_password			=	"admin";
+
+// If $post_create_script is defined, then this script / command will be
+// executed after a repository is created. 
+// When the script/command is executed the one and only parameter will be
+// the physical location of the repository.
+// This might copy a default set of hooks or config files
+//
+// $post_create_script = "newrepo-script";
+
+?>

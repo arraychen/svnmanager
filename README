@@ -1,0 +1,24 @@
+SVNManager
+----------
+
+SVNManager is an administration suite to manage Subversion repositories on a web server.
+
+As stated on their website:
+
+"The goal of the Subversion project is to build a version control system that is a compelling 
+replacement for CVS in the open source community."
+
+Subversion has matured and our organisation has found more purposes to create Subversion
+repositories than just for source code. Therefore it seemed nice to me to create a 
+web based Subversion administration suite, with which you can:
+
+- Create, remove, load & dump repositories
+- Manage user accounts for access to the repositories
+- Manage groups for access to the repositories
+- Invite users by email to create an account on the server
+
+
+I hope it can be useful for you and your organization.
+
+
+Marijn Verkerk 

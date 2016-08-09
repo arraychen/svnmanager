@@ -1,0 +1,962 @@
+                             -------------------
+                             Validation in PRADO
+                                --------------
+                                Xiang Wei Zhuo
+                                 -----------
+                                 25 Nov 2004
+
+Form Validation
+~~~~~~~~~~~~~~~
+
+  An important aspect in web application is validating the user input. It is
+  imperative to validate data to ensure integrity and uphold security. If you
+  collect information from your users, a registration from for example , and
+  your users enter incorrect or mal-formatted data, such as an incorrect email
+  address or an invalid zip code, the data is as good as garbage and can
+  potentially be a threat to the system. Thus, it is important that the user
+  data is verified, at minimum, in the correct format. 
+
+  Validating user input data is the process known as form validation. The
+  process can occur at two places, <<client side validation>>: using client
+  side javascripts on the user's browser, and <<server side validation>>:
+  using the server scripting language, e.g. PHP, to validate the input. Server
+  side validation is a must, while client side validation should be optional.
+  In the case of browsers without javascript, only server side validation is
+  viable.
+
+  In Prado, validation is performed when a button component, such a
+  <<<TButton>>>, a <<<TLinkButton>>> or a <<<TImageButton>>> is clicked and
+  the <<<CausesValidation>>> property of these components is set to
+  <<<true>>>. Manual initiation of validation can be performed by using the
+  <<<validate()>>> method of the <<<TPage>>> class.
+
+  Validation controls <<always>> perform validation on the server and optional
+  client side validation using javascripts. Client side validation is
+  supported in modern browsers such as Internet Explorer 6.0, Firefox 1.0,
+  Safari 1.2. Javascript client side validation enhances the validation
+  process by checking user input before it is sent to the server. This allows
+  errors to be detected on the client before the form is submitted, thus
+  avoiding the round-trip of information necessary for server-side validation.
+
+  Prado provides a set of validator components for input validation, namely, 
+
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| <<Validator Class Name>>              | <<Purpose>>                                                                                                                            
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TValidator>>>}}                  | The base class for validation components.                                                                                              
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TRequiredFieldValidator>>>}}     | Makes the associated input component a required field                                                                                  
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TCompareValidator>>>}}           | Compares the value entered by the user into an input component with the value entered into another input component or a constant value.
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TRangeValidator>>>}}             | Tests whether the value of an input component is within a specified range.                                                             
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TRegularExpressionValidator>>>}} | Validates whether the value of an associated input component matches the pattern specified by a regular expression.                    
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TEmailAddressValidator>>>}}      | Validates whether the value of an associated input component is a valid email address.                                                 
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TCustomValidator>>>}}            | Performs user-defined validation (either server-side or client-side or both) on an input component.                                    
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| {{<<<TValidationSummary>>>}}          | Displays a summary of all validation errors inline on a Web page, in a message box, or both.                                           
+*---------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+List of validators and its purpose in Prado.
+
+* When validation occurs
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Validation occurs after page initialization (that is, after view-state and
+  postback data have been processed) but before Change or Click event handlers
+  are called. 
+
+  You can perform the validation procedure earlier by calling the control's
+  <<<Validate>>> method, for example during page load.
+
+  If the user's browser is sufficient to support later javascript standards,
+  client side validation is performed before the form is submitted. Only when
+  all the client side validations are passed is the form submitted. If
+  javascript is disabled, the form will be submitted and validation is
+  performed by the server. <<Validation will always be performed by the
+  server.>>
+
+* Validators and examples
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  In Prado, validators are web components, thus it is added in the template
+  file. Lets take a simple example of validating a new user registration form.
+  This example will utilize many of the above aforementioned validators.
+
+  We want to build the following simple registration form.
+
+[form_1]
+
+  The template code is given below, save the file as "ValidatorExample.tpl"
+  into your application directory. As for styling the form, it is up to your
+  imagination.
+
+------------------------------------------------------------------------------
+<h2>New User Registration</h2>
+
+<com:TForm >
+
+<fieldset>
+<legend>Login details (all fields are required)</legend>
+<label>Username:</label>
+<com:TTextBox ID="Username" />
+
+<label>Email Address:</label>
+<com:TTextBox ID="Email" />
+
+<label>Password:</label>
+<com:TTextBox ID="Password" TextMode="Password" />
+
+<label>Password Again:</label>
+<com:TTextBox ID="PasswordCheck" TextMode="Password" />
+
+</fieldset>
+
+<div class="buttons">
+<com:TButton Text="Register New User" OnClick="registerUser" />
+</div>
+
+<com:TLabel ID="msg" class="msg"/>
+
+</com:TForm>
+------------------------------------------------------------------------------
+
+  Note that, in practice the <<<\<label\>>>> should have a <<<for>>> attribute
+  with value corresponding to the form input component.
+
+  The class code for the corresponding template page is given below, save the
+  class file as "ValidatorExample.php" into your application directory.
+
+------------------------------------------------------------------------------
+/**
+ * A simple example to demonstration the simplicity and 
+ * intuitiveness of adding input validation using PRADO. 
+ */
+class ValidatorExample extends TPage
+{
+
+    /**
+     * Register new user event.
+     * Add a new user into the database.
+     * @param TControl sender of the event
+     * @param TEventParameter event parameter
+     */
+    function registerUser($sender, $param)
+    {
+        $msg = $this->msg;
+
+        // check that all the validators were successful.
+        if($this->isValid())
+        {
+            // add the new user details into a database
+            // but for this example, we will just output a message.
+            $msg->setText('User Added');
+            $msg->setStyle('color:blue');
+        }
+    }
+}
+------------------------------------------------------------------------------
+
+  If you click on the "Register New User" button, you should see the "User
+  Added" message below the button in blue colour. 
+
+  At this point, no form validation was performed, many things could go wrong,
+  such as
+
+      * None of the fields are entered and the user simply clicked on the
+        "Register New User" button
+
+      * The user provide a bogus email address. Validating email address can
+        be tricker, for simplicity we will choose to validate the pattern of
+        the email address entered.
+
+      * The two passwords might not match.
+
+  And many more, the exact requirements are listed in the table below.
+
+*------------------+---------------------------------------------------------------------------------------------+
+| <<Input Fields>> | <<Valid Input Requirements>>                                                               
+*------------------+---------------------------------------------------------------------------------------------+
+| Username         | A required field. Must not match with existing user names.                                 
+*------------------+---------------------------------------------------------------------------------------------+
+| Email Address    | A required field. Must match an predefined email pattern. The default pattern will be used.
+*------------------+---------------------------------------------------------------------------------------------+
+| Password         | A required field. Password must have length of 6 or greater.                               
+*------------------+---------------------------------------------------------------------------------------------+
+| Password Again   | A required field. The two password fields must match.                                      
+*------------------+---------------------------------------------------------------------------------------------+
+
+  We will go through each of the input fields and add the appropriate
+  validators.
+
+** Required Field Validators ({TRequiredFieldValidator})
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  This is the simplest validator, ensuring that the input field has some sort
+  of value. To ensure that all of our input fields are required, we add <<<a
+  TRequiredFieldValidator>>> component for each of the input fields. Take the
+  "Username" field for example,
+
+------------------------------------------------------------------------------
+<label>Username:</label>
+<com:TTextBox ID="Username" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="Username" 
+        Display="Dynamic"
+        ErrorMessage="Please choose a username." />
+------------------------------------------------------------------------------
+
+  Where <<<ControlToValidate>>> is the <<<ID>>> of the input component that
+  requires validation. In this case, the "Username" is a required field.
+
+  Every validator component has the following properties, defined in the
+  <<<{TValidator}>>> class
+
+      [ControlToValidate] The ID of the component for this validator. <This
+          property must be set to the ID path of an input component. The ID
+          path is the dot-connected IDs of the components reaching from the
+          validator's parent component to the target component. For example,
+          if HomePage is the parent of Validator and SideBar components, and
+          SideBar is the parent of UserName component, then the ID path for
+          UserName would be "SideBar.UserName" if UserName is to be validated
+          by Validator>
+
+      [ErrorMessage] The text for the error message when the input component
+          failed to validate.
+
+      [Display] The display behavior of the error message in a validation
+          component. The allowed values are <<<None>>>, <<<Static>>> and
+          <<<Dynamic>>>. The default is <<<Static>>>.
+
+          <<<None>>>, the validator component and the error message will not
+          be displayed.
+
+          <<<Dynamic>>>, the validator component and the error message will
+          only be displayed if the validation fails.
+
+          <<<Static>>>, the validator component and the error message is
+          always displayed regardless of validation success or failure.
+
+      [EnableClientScript] Indicating whether client-side validation is
+          enabled. Default is <<<true>>>.
+
+  Including the above properties, <<<TRequiredFieldValidator>>> has the
+  following additional property.
+
+      [InitialValue] The associated input component fails validation if its
+          value does not change from the InitialValue upon losing focus.
+
+  Similarly, you can add <<<TRequiredFieldValidator>>> for other input fields
+  in the example. 
+
+------------------------------------------------------------------------------
+<h2>New User Registration</h2>
+
+<com:TForm >
+
+<fieldset>
+<legend>Login details (all fields are required)</legend>
+<label>Username:</label>
+<com:TTextBox ID="Username" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="Username" 
+        Display="Dynamic"
+        ErrorMessage="Please choose a username." />
+
+<label>Email Address:</label>
+<com:TTextBox ID="Email" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="Email" 
+        Display="Dynamic"
+        ErrorMessage="Please enter your email address." /> 
+
+<label>Password:</label>
+<com:TTextBox ID="Password" TextMode="Password" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="Password" 
+        Display="Dynamic"
+        ErrorMessage="Please choose a password with 6 or more characters." />
+
+<label>Password Again:</label>
+<com:TTextBox ID="PasswordCheck" TextMode="Password" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="PasswordCheck" 
+        Display="Dynamic"
+        ErrorMessage="Please re-enter your password." />
+
+</fieldset>
+<div class="buttons">
+<com:TButton Text="Register New User" OnClick="registerUser" />
+</div>
+
+</com:TForm>
+------------------------------------------------------------------------------
+
+  If you now click on the "Register New User" button, and if you did not
+  supplying any inputs, the required field validators should fire and display
+  the error messages. If your web browser is javascript enabled, the form will
+  NOT be submitted. The validation will be performed on the client side
+  utilizing javascripts.
+
+[form_2]
+
+  The next validation requirement is to have unique usernames, that is, we
+  must check if the input username exists or have been taken. If the user data
+  are stored in the database, this will require a custom validator. We will
+  defer the use of custom validator to a later section. 
+
+** Email Address Validators ({TEmailAddressValidator})
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The next input component to validate in our example is the email address.
+  Validating email address can be tedious and complicated. At a simple level,
+  we can check the user entered email address against a string pattern. At a
+  higher level, the existence of the email address exists is required and is a
+  complicated process. It involves checking that the server in the given email
+  address exists and that the user account at the server is a valid one. 
+
+  PRADO support a simple level email address validation by utilizing regular
+  expressions. In addition, if your server's PHP supports a <<<checkdnsrr>>>
+  function, PRADO can perform a DNS record check to verify the existence of
+  server of the given email address.
+
+  For this example we are going to verify the email address with the default
+  pattern match. 
+
+------------------------------------------------------------------------------
+<label>Email Address:</label>
+<com:TTextBox ID="Email" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="Email" 
+        Display="Dynamic"
+        ErrorMessage="Please enter your email address." /> 
+<com:TEmailAddressValidator
+        ControlToValidate="Email"
+        Display="Dynamic"
+        ErrorMessage="Please your email address check for typing errors." />
+------------------------------------------------------------------------------
+
+  Using the default email address regular expression matching is straight
+  forward. If you wish to use your own regular expression pattern you can
+  specify the property <<<RegularExpression>>> to your desired expression. You
+  can find more email address patterns and many other regular expression
+  patterns from {{{http://regexlib.com/}http://regexlib.com/}}
+
+** Regular Expressions ({TRegularExpressionValidator})
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Following from the email address validator, the base (or parent) class of
+  <<<TEmailAddressValidator>>> is the regular expression validator. The
+  validator has the following property in addition to the parent
+  (<<<TValidator>>>) properties.
+
+      [RegularExpression] The regular expression that determines the pattern
+          used to validate a field.
+
+          Some commonly used regular expressions include: 
+
+              * Email Address:
+                <<<\\w+(\[-+.\]\\w+)*@\\w+(\[-.\]\\w+)*\\.\\w+(\[-.\]\\w+)*>>>
+
+              * Internal URL: <<<http://(\[\\w-\]+\\.)+\[\\w-\]+(/\[\\w-
+                ./?%&=\]*)?>>>
+
+              * Japanese Phone Number: <<<(0\\d\{1,4\}-\|\\(0\\d\{1,4\}\\)
+                ?)?\\d\{1,4\}-\\d\{4\}>>>
+
+              * Japanese Postal Code: <<<\\d\{3\}(-(\\d\{4\}\|\\d\{2\}))?>>>
+
+              * P.R.C. Phone Number:
+                <<<(\\(\\d\{3\}\\)\|\\d\{3\}-)?\\d\{8\}>>>
+
+              * P.R.C. Postal Code: <<<\\d\{6\}>>> 
+
+              * P.R.C. Social Security Number: <<<\\d\{18\}\|\\d\{15\}>>>
+
+              * U.S. Phone Number: <<<((\\(\\d\{3\}\\)
+                ?)\|(\\d\{3\}-))?\\d\{3\}-\\d\{4\}>>>
+
+              * U.S. ZIP Code: <<<\\d\{5\}(-\\d\{4\})?>>>
+
+              * U.S. Social Security Number: <<<\\d\{3\}-\\d\{2\}-\\d\{4\}>>>
+
+          More regular expression patterns can be found on the Internet, e.g.
+          {{{http://regexlib.com/}http://regexlib.com/}}
+
+  For the example, we are going to use the regular expression validator to
+  verify the number of password characters. 
+
+------------------------------------------------------------------------------
+<label>Password:</label>
+<com:TTextBox ID="Password" TextMode="Password" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="Password" 
+        Display="Dynamic"
+        ErrorMessage="Please choose a password with 6 or more characters." />
+<com:TRegularExpressionValidator
+        ControlToValidate="Password" 
+        RegularExpression="[\w]{6,}" 
+        Display="Dynamic"
+        ErrorMessage="Your password must have at least 6 characters." />
+------------------------------------------------------------------------------
+
+  The regular expression "<<<\[\\w\]\{6, \}>>>" is a pattern to verify that
+  there are at least 6 non-white space characters. The expression
+  "<<<\[\\w\]>>>" defines a set of non-white space characters, you could for
+  example define the set of alphabets from a to z "<<<\[a-z\]>>>". The
+  expression "<<<\{6, \}">>> checks the occurrence of the pattern, in this
+  case, 6 or more occurrences. For example, if you change the expression to
+  "<<<\{3,6\}>>>", it will verify if there are 3 to 6 patterns, no more no
+  less. Further guides and introductions to regular expression can be found on
+  the Internet, try www.google.com and search for "regular expression".
+
+** Comparing Input Fields ({TCompareValidator})
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The <<<TCompareValidator>>> compares the value entered by the user into an
+  input component with the value entered into another input component or a
+  constant value.
+
+  In the example, there are two password fields, "Password" and "Password
+  Again". The second password field is to ensure that the user has enter their
+  password without typing mistakes. This is validated by comparing the values
+  of the two password fields. It is valid when the two password fields values
+  are identical. The validator <<<TCompareValidator>>> is used to compare two
+  input fields, the comparison can be made in many ways, see below for
+  details. The following are the properties of the <<<TCompareValidator>>> in
+  addition to the parent {{<<<TValidator>>>}}.
+
+      [ControlToCompare] The input component to compare with the input control
+          being validated.
+
+      [ValueToCompare] A constant value to compare with the value entered by
+          the user into the input component being validated.
+
+      [ValueType] The data type (<<<Integer>>>, <<<Double>>>, <<<Currency>>>,
+          <<<Date>>>, <<<String>>>) that the values being compared are
+          converted to before the comparison is made.
+
+      [Operator] The comparison operation to perform (<<<Equal>>>,
+          <<<NotEqual>>>, <<<GreaterThan>>>, <<<GreaterThanEqual>>>,
+          <<<LessThan>>>, <<<LessThanEqual>>>, <<<DataTypeCheck>>>).
+
+  The <<<TCompareValidator>>> can actually perform many functions, the
+  simplest is to compare to field values, as the case in the example.
+
+------------------------------------------------------------------------------
+<label>Password:</label>
+<com:TTextBox ID="Password" TextMode="Password" /> <br />
+...
+<label>Password Again:</label>
+<com:TTextBox ID="PasswordCheck" TextMode="Password" /> <br />
+<com:TRequiredFieldValidator 
+        ControlToValidate="PasswordCheck" 
+        Display="Dynamic"
+        ErrorMessage="Please re-enter your password." />
+<com:TCompareValidator
+        ControlToValidate="PasswordCheck" 
+        ControlToCompare="Password" 
+        Display="Dynamic"
+        ErrorMessage="Your password entries did not match." />
+------------------------------------------------------------------------------
+
+  To specify the input component to validate, set the <<<ControlToValidate>>>
+  property to the ID of the input component. To compare the associated input
+  component with another input component, set the <<<ControlToCompare>>>
+  property to the ID of the component to compare with. 
+
+  In the example, the <<<TCompareValidator>>> is set to validate the
+  <<<PasswordCheck>>> field. The value of the <<<PasswordCheck>>> field is
+  compared to that of the <<<Password>>> field, if they are identical the
+  validation is valid.
+
+  To compare the associated input component with a constant value, specify the
+  constant value to compare with by setting the <<<ValueToCompare>>> property.
+
+  The ValueType property is used to specify the data type of both comparison
+  values. Both values are automatically converted to this data type before the
+  comparison operation is performed. The following {value types} are
+  supported.
+
+      [Integer] A 32-bit signed integer data type.
+
+      [Double] A double-precision floating point number data type.
+
+      [Currency ] A decimal data type that can contain currency symbols.
+
+      [Date ] A date data type. The format follows the GNU date syntax. <<Be
+          aware >>of the <<PHP 5 bug>> regarding the <<<strtotime>>> function,
+          it does not take into account of hours, minutes and seconds when
+          specifying time.
+
+      [String ] A string data type.
+
+  Use the Operator property to specify the type of comparison to perform, such
+  as <<<Equal>>>, <<<NotEqual>>>, <<<GreaterThan>>>, <<<GreaterThanEqual>>>,
+  <<<LessThan>>>, <<<LessThanEqual>>>, <<<DataTypeCheck>>>. If you set the
+  Operator property to DataTypeCheck, the TCompareValidator component will
+  ignore the ControlToCompare and ValueToCompare properties and simply
+  indicates whether the value entered into the input component can be
+  converted to the data type specified by the ValueType property.
+
+  Note that if the input control is empty, no validation functions are called
+  and validation succeeds. Use a <<<RequiredFieldValidator>>> control to
+  require the user to enter data into the input control.
+
+** Range Validators ({TRangeValidator})
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The <<<TRangeValidator>>> tests whether the value of an input component is
+  within a specified range. The <<<TRangeValidator>>> component uses three key
+  properties to perform its validation. The <<<MinValue>>> and <<<MaxValue>>>
+  properties specify the minimum and maximum values of the valid range. The
+  <<<ValueType>>> property is used to specify the data type of the values to
+  compare. The values to compare are converted to this data type before the
+  validation operation is performed. The value type supported are identical to
+  <<<TCompareValidator>>> {{value types}}.
+
+  The <<<TRangeValidator>>> has the following properties in addition to the
+  base {{<<<TValidator>>>}} properties.
+
+      [MinValue] The minimum value of the validation range.
+
+      [MaxValue] The maximum value of the validation range.
+
+      [ValueType] The data type (<<<Integer>>>, <<<Double>>>, <<<Currency>>>,
+          <<<Date>>>, <<<String>>>) that the values being compared are
+          converted to before the comparison is made.
+
+  The following example demonstrates how to create a <<<TRangeValidator>>>
+  control on the Web page to determine whether the value entered into an input
+  control is within the comparison range.
+
+------------------------------------------------------------------------------
+<h3>RangeValidator Example</h3>
+
+<com:TForm >
+
+<label>Enter a number from 1 to 10:</label>
+<com:TTextBox ID="TextBox1" />
+<com:TRangeValidator 
+        ControlToValidate="TextBox1"
+        MinValue="1"
+        MaxValue="10"
+        ValueType="Integer"
+        Display="Dynamic"
+        ErrorMessage="The value must be from 1 to 10!" />
+<br />
+<com:TButton Text="Test Range Validator" />
+
+</com:TForm>
+------------------------------------------------------------------------------
+
+** Custom Validators ({TCustomValidator})
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  There are many cases where custom validation is required. For example, we
+  require that the username for new user registration be unique. This would
+  require the username to be checked in a username list, say stored in a
+  database. The <<<TCustomValidator>>> control provides a user-defined
+  validation function for an input control. It is a separate control from the
+  input control it validates, which allows you to control where the validation
+  message is displayed. The <<<TCustomValidator>>> has the following property
+  and event in additional to the parent <<<TValidator>>> properties.
+
+      [ClientValidationFunction] The name of the custom client-side script
+          function used for validation.
+
+      [OnServerValidate (event)] Occurs when validation is performed on the
+          server. Event delegates must set the event parameter
+          <<<TServerValidateEventParameter.isValid>>> to false if they find
+          the value is invalid.
+
+  To create a server-side validation function, provide a handler for the
+  <<<OnServerValidate>>> event that performs the validation. The data string
+  of the input component to validate can be accessed by the value property of
+  the event parameter which is of type <<<TServerValidateEventParameter>>>.
+  The result of the validation should be stored in the <<<isValid>>> property
+  of the event parameter.
+
+  To create a client-side validation function, first add the server-side
+  validation function described earlier. Next, add the client-side validation
+  script function to the template page or override the <<<onPreRender>>>
+  function of the page to add the javascript function using PHP. The function
+  should have the following signature.
+
+------------------------------------------------------------------------------
+<script type="text/javascript">
+<!--
+        function ValidationFunctionName(sender, parameter)
+        {
+                //if the parameter value is true
+                if(parameter == ... )
+                        return true;
+                else
+                        return false;
+        }
+-->
+</script>
+------------------------------------------------------------------------------
+
+  Use the <<<ClientValidationFunction>>> property to specify the name of the
+  client-side validation script function associated with the
+  <<<TCustomValidator>>>.
+
+  Continuing with the new user registration example, we require the usernames
+  to be unique. Add the following custom validator in the template.
+
+------------------------------------------------------------------------------
+<com:TCustomValidator
+        ControlToValidate="Username"
+        ClientValidationFunction="checkUsernameJS"
+        OnServerValidate="checkUsername"
+        Display="Dynamic"
+        ErrorMessage="Username exists, please try a different username." />
+------------------------------------------------------------------------------
+
+  Here, the server side validation calls checkUsername (implemented in PHP),
+  and the client-side validations call also checkUsernameJS (implemented in
+  javascript). The PHP code is as follows, note that the javascript is written
+  inside PHP, it could be written in the template just as well.
+
+------------------------------------------------------------------------------
+/**
+* Check if the username exists.
+* @param TControl sender of the event
+* @param TServerValidateEventParameter event parameter
+*/
+function checkUsername($sender, $param)
+{
+        //assume the username can be checked against a database
+        //or some other datasource. For the example, we will
+        //just do a simple comparison. If the value equals "admin"
+        //the validation failed.
+        if($param->value == 'admin')
+                $param->isValid = false;
+}
+
+/**
+ * Overrides parent implementation by registering a Javascript 
+ * for custom validation.
+ * @param TEventParameter the event parameter
+ */
+function onPreRender($param)
+{
+        parent::onPreRender($param);
+        $page=$this->getPage();
+        
+        //javascript checkUsername, Lets assume that XMLHttpRequest 
+        //can be used to check the username. For the example,
+        //we will just do a simple comparison in javascript
+        $jscript="
+                function checkUsernameJS(sender, parameter)
+                {
+                        if(parameter == 'admin')
+                                return false;
+                        else
+                                return true;
+                }
+        ";
+
+        //register the javascript
+        $page->registerEndScript('checkUsername',$jscript);
+}
+------------------------------------------------------------------------------
+
+  Note that to add the javascript in side PHP, we override the
+  <<<onPreRender>>> function and use <<<$page-\>registerEndScript>>> function
+  to add the javascript. Similarly, the javascript could be added to the
+  template.
+
+  When creating a client-side validation function, be sure to also include the
+  functionality of the server-side validation function. If you create a
+  client-side validation function without a corresponding server-side
+  function, it is possible for malicious code to bypass validation.
+
+** Validation Summary ({TValidationSummary})
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The <<<TValidationSummary>>> control displays a summary of all validation
+  errors inline on a Web page, in a message box, or both. The summary can be
+  displayed as a list, as a bulleted list, or as a single paragraph based on
+  the <<<DisplayMode>>> property. The summary can be displayed on the Web page
+  and in a message box by setting the <<<ShowSummary>>> and
+  <<<ShowMessageBox>>> properties, respectively.
+
+  The <<<TValidationSummary>>> class is based on TWebControl class, it has the
+  following properties.
+
+      [DisplayMode] The display mode (<<<BulletList>>>, <<<List>>>,
+          <<<SingleParagraph>>>) of the validation summary.
+
+      [HeaderText] The header text displayed at the top of the summary.
+
+      [EnableClientScript] A boolean (<<<True>>> or <<<False>>>) value
+          indicating whether the <<<TValidationSummary>>> component updates
+          itself using client-side script
+
+      [ShowMessageBox] A boolean (<<<True>>> or <<<False>>>) value indicating
+          whether the validation summary is displayed in a message box. If
+          <<<EnableClientScript>>> is false, this property has no effect.
+
+      [ShowSummary] A boolean (<<<True>>> or <<<False>>>) value indicating
+          whether the validation summary is displayed inline.
+
+  The following example displays a list of validation errors on the page.
+
+------------------------------------------------------------------------------
+<com:TValidationSummary DisplayMode="BulletList"/>
+------------------------------------------------------------------------------
+
+* Summary
+~~~~~~~~~
+
+  Validation controls always validate the associated input control on the
+  server. Client-side validation enhances the validation process by avoiding
+  the round-trip of information necessary for server-side validation. 
+
+  Multiple validation controls can be used with an individual input control to
+  validate different criteria. For example, you can apply multiple validation
+  controls on a <<<TTextBox>>> control that allow the user to enter the
+  quantity of items to add to a shopping cart. You can use a
+  <<<TRangeValidator>>> control to ensure that the value specified is within a
+  set range and a <<<TRequiredFieldValidator>>> control to ensure that the
+  user enters a value into the <<<TTextBox>>> control.
+
+  If an input control fails validation, the text specified by the
+  <<<ErrorMessage>>> property is displayed in the validation control. This
+  text is also displayed in the <<<TValidationSummary>>> control, if one is
+  placed on the Web page.
+
+  <<N.B.>> If the input control is empty, no validation functions are called
+  and validation succeeds. Use a <<<RequiredFieldValidator>>> control to
+  require the user to enter data in the input control.
+
+  Prado provides a set of essential validation tools to validate user inputs
+  in an easy and effective manner. Validation must be enforce in form inputs
+  to ensure data integrity and application security. However, it must be noted
+  that validation alone is not sufficient to cover other aspects of web
+  application security.
+
+* Complete code listing
+~~~~~~~~~~~~~~~~~~~~~~~
+
+  Complete PHP and template code for the example demonstrated in this document
+  are listed below.
+
+  <<ValidatorExample.php>>
+
+------------------------------------------------------------------------------
+<?php
+
+/**
+ * A simple example to demonstration the simplicity and
+ * intuitiveness of adding input validation using PRADO.
+ */
+class ValidatorExample extends TPage
+{
+
+    /**
+     * Register new user event.
+     * Add a new user into the database.
+     * @param TControl sender of the event
+     * @param TEventParameter event parameter
+     */
+    function registerUser($sender, $param)
+    {
+        $msg = $this->msg;
+
+        // check that all the validators were successful.
+        if($this->isValid())
+        {
+            // add the new user details into a database
+            // but for this example, we will just output a message.
+            $msg->setText('User Added');
+            $msg->setStyle('color:blue');
+        }
+    }
+
+    /**
+     * Check if the username exists.
+     * @param TControl sender of the event
+     * @param TServerValidateEventParameter event parameter
+     */
+    function checkUsername($sender, $param)
+    {
+        //assume the username can be checked against a database
+        //or some other datasource. For the example, we will
+        //just do a simple comparison. If the value equals "admin"
+        //the validation failed.
+        if($param->value == 'admin')
+            $param->isValid = false;
+    }
+
+    /**
+     * Overrides parent implementation by registering a Javascript
+     * for custom validation.
+     * @param TEventParameter the event parameter
+     */
+    function onPreRender($param)
+    {
+        parent::onPreRender($param);
+        $page=$this->getPage();
+
+        //javascript checkUsername, Lets assume that XMLHttpRequest
+        //can be used to check the username. For the example,
+        //we will just do a simple comparison in javascript
+        $jscript="
+            function checkUsernameJS(sender, parameter)
+            {
+                if(parameter == 'admin')
+                    return false;
+                else
+                    return true;
+            }
+        ";
+
+        //register the javascript
+        $page->registerEndScript('checkUsername',$jscript);
+    }
+}
+?>
+------------------------------------------------------------------------------
+
+  <<ValidatorExample.tpl>>
+
+------------------------------------------------------------------------------
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>Prado Validation Example</title>
+    <style type="text/css">
+    /*<![CDATA[*/
+    body
+    {
+        padding: 2em;
+        font-family: Georgia,"Times New Roman", Times, serif;
+    }
+    .msg
+    {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 1em;
+    }
+    .buttons
+    {
+        padding: 2em;
+        text-align: center;
+        width: 20em;
+    }
+    label
+    {
+        display: block;
+        margin-top: 1.5em;
+        font-size: 0.75em;
+        font-weight: bold;
+        padding-bottom: 0.2em;
+    }
+    legend
+    {
+        padding: 0 0.5em;
+    }
+    fieldset
+    {
+        padding: 1em 2em 2em 2em;
+        width: 20em;
+    }
+    span
+    {
+        font-size: 0.75em;
+    }
+    .msg
+    {
+        display: block;
+    }
+    /*]]>*/
+    </style>
+</head>
+
+<body>
+<h2>New User Registration</h2>
+
+<com:TForm >
+
+<fieldset>
+<legend>Login details (all fields are required)</legend>
+<label>Username:</label>
+<com:TTextBox ID="Username" /> <br />
+<com:TRequiredFieldValidator
+    ControlToValidate="Username"
+    Display="Dynamic"
+    ErrorMessage="Please choose a username." />
+<com:TCustomValidator
+    ControlToValidate="Username"
+    ClientValidationFunction="checkUsernameJS"
+    OnServerValidate="checkUsername"
+    Display="Dynamic"
+    ErrorMessage="Username exists, please try a different username." />
+
+<label>Email Address:</label>
+<com:TTextBox ID="Email" /> <br />
+<com:TRequiredFieldValidator
+    ControlToValidate="Email"
+    Display="Dynamic"
+    ErrorMessage="Please enter your email address." />
+<com:TEmailAddressValidator
+    ControlToValidate="Email"
+    Display="Dynamic"
+    ErrorMessage="Please your email address check for typing errors." />
+
+<label>Password:</label>
+<com:TTextBox ID="Password" TextMode="Password" /> <br />
+<com:TRequiredFieldValidator
+    ControlToValidate="Password"
+    Display="Dynamic"
+    ErrorMessage="Please choose a password with 6 or more characters." />
+<com:TRegularExpressionValidator
+    ControlToValidate="Password"
+    RegularExpression="[\w]{6,}"
+    Display="Dynamic"
+    ErrorMessage="Your password must have at least 6 characters." />
+
+<label>Password Again:</label>
+<com:TTextBox ID="PasswordCheck" TextMode="Password" /> <br />
+<com:TRequiredFieldValidator
+    ControlToValidate="PasswordCheck"
+    Display="Dynamic"
+    ErrorMessage="Please re-enter your password." />
+<com:TCompareValidator
+    ControlToValidate="PasswordCheck"
+    ControlToCompare="Password"
+    Display="Dynamic"
+    ErrorMessage="Your password entries did not match." />
+
+</fieldset>
+<div class="buttons">
+<com:TButton Text="Register New User" OnClick="registerUser" />
+</div>
+
+<com:TLabel ID="msg" class="msg"/>
+
+</com:TForm>
+
+</body>
+</html>
+------------------------------------------------------------------------------
+
+* References
+~~~~~~~~~~~~
+
+      [PRADO component framework for PHP 5] 
+          {{{http://www.xisc.com/}http://www.xisc.com/}}
+
+      [Web Form Validation in ASP.NET] {{http://tinyurl.com/58nhy}}
+
+      [Regular Expression Library] 
+          {{{http://regexlib.com/}http://regexlib.com/}}
+
+      [Easier form validation with PHP] {{http://tinyurl.com/69eru}}
+

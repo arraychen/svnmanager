@@ -1,0 +1,467 @@
+html { background-color: #E5E8EA; }
+body { 		
+	padding: 1em 2em;
+	font-family: Georgia,"Times New Roman", Times, serif;	
+	width: 50em;
+	margin: 0 auto;
+	background-color: white;
+	line-height: 125%;
+}
+.wizard
+{
+	width: 100%;
+	margin: 0 auto;
+}
+
+h2
+{
+	margin-top: 1.4em;
+}
+
+/* button navigation buttons */
+.wizard .navigation
+{
+	padding: 1em;
+	text-align: right;
+	background-color: white;
+}
+
+/* the continue button */
+.wizard .navigation .button
+{
+	color: white;
+	font-weight: bold;
+	padding: 0.3em 1em;
+	background-color: #e00;
+	border: 1px solid #c00;
+	border-top-color: #fcc;
+	border-left-color: #fcc;
+}
+
+/* validation summary */
+.wizard .validator
+{
+	border-bottom: 1px solid #39c;
+	background-color: #ffc;
+	padding: 0.5em 1em;
+	font-size: 0.8em;
+	font-weight: bold;
+	display: none;
+}
+.wizard .validator a
+{
+	font-weight: normal;
+	text-decoration: none;
+}
+.wizard .validator a:hover
+{
+	color: red;
+}
+.wizard .validator p
+{
+	margin-left: 1em;
+	margin-bottom: -1em;
+}
+
+.wizard .form, .wizard .interary
+{
+	width: 28.5em;
+	border: 1px solid #39c;
+	float: left;
+	background-color: #39c;
+	padding: 0;
+}
+
+/* interary side bar */
+.wizard .interary
+{
+	background-color: white;
+	width: 18.5em;
+	margin-left: 2em;
+}
+
+.wizard .interary h4
+{
+	background-color: #39c;
+	color: white;
+	font-weight: bold;
+	margin: 0;
+	padding: 0.3em 0.5em;
+}
+.wizard .interary p
+{
+	padding: 0.5em;
+	margin-top: 0;
+}
+.wizard .interary .item
+{
+	border-top: 1px solid #39c;
+	padding: 0.5em;
+	font-size: 0.75em;
+}
+.wizard .interary .item th
+{
+	vertical-align: top;
+	text-align: left;
+	white-space: nowrap;
+	padding-top: 0.5em;
+}
+
+.wizard .interary .image
+{
+	margin: -1em;
+}
+* html .wizard .interary .image
+{
+	padding: 0;
+	margin: -0.5em;
+}
+.wizard .interary .image img
+{
+	width: 100%;
+}
+
+/* START all to do with fieldset and legend layout */
+.wizard .form
+{
+	border-top-width: 1.85em;
+}
+.wizard .step
+{
+	background-color: White;
+}
+.wizard .form legend
+{
+	padding: 0.3em 0.5em;
+	color: white;
+	font-weight: bold;
+}
+
+.wizard .subform
+{		
+	margin: 0;
+	font-size: 0.8em;
+	padding: 1em;
+	border: 0 none;
+	border-bottom: 1px solid #39c;
+	
+}
+
+.wizard .subform tt
+{
+	font-size: 1.2em;
+}
+
+.wizard .subform legend
+{
+	margin: 0;
+	margin-top: 0.5em;
+	margin-left: -0.5em;		
+	color: #39c;
+	font-size: 1.2em;
+}
+
+* html .wizard .subform legend
+{
+	margin-top: 0em;
+	margin-left: -0.8em;
+}
+
+.wizard .subform legend .number
+{
+	color: white;
+	padding: 0.1em 0.4em;
+	background-color: #c00;
+	margin-right: 0.5em;
+}
+/* END legend and fieldset layout */
+
+/* form elements */
+
+.wizard .subform .element
+{
+	padding: 0.3em 0;
+}
+.wizard .subform p
+{
+	margin-top: 0.5em;
+}
+
+.wizard .subform label
+{
+	font-weight: bold;
+	width: 15.5em;
+	float: left;
+	font-size: 0.9em;
+}
+
+.wizard .subform .required
+{
+	color: red;	
+	margin-left: -0.75em;
+	font-weight: bold;
+}
+.wizard .subform .simpleRequired
+{
+	color: red;	
+	font-weight: bold;
+}
+.wizard .subform .requiredInput, .wizard .subform .requiredInput2
+{
+	background-color: #fee;
+	border: 1px solid #c00;
+}
+.wizard .subform table th
+{
+	text-align: left;
+	padding-top: 1em;
+}
+.wizard .subform table label
+{
+	float: none;
+	width: 100%;
+}
+div.wizard .subform .price, div.wizard .interary .price
+{
+	text-align: right;
+	font-weight: bold;
+}
+.wizard .subform label.liability
+{
+	float: none;
+	width: 100%;
+	display: inline;
+}
+.wizard label:hover
+{
+	color: #c00;
+}
+
+/* auto clear fix */
+.navigationSteps:after, .wizard:after {
+content: "."; 
+display: block; 
+height: 0; 
+clear: both; 
+visibility: hidden;
+}
+.navigationSteps, .wizard {display: inline-block;}
+/* Hides from IE-mac \*/
+* html .wizard, * html .navigationSteps {height: 1%;}
+.navigationSteps, .wizard {display: block;}
+/* End hide from IE-mac */
+
+/* START Navigation steps */
+div.wizard .navigationSteps
+{
+	font-family: Arial, Helvetica, sans-serif;
+	margin-bottom: 1em;
+}
+.navigationSteps .stepguide
+{
+	background-color: #def;
+	float: left;	
+	padding: 0.1em;
+	border-bottom: 1px solid #47e;
+	border-top: 1px solid #47e;
+	text-decoration: none;
+	background-image: url(white_arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 90% 50%;
+}
+.navigationSteps .step1
+{
+	width: 23%;
+	border-left: 1px solid #47e;
+}
+.navigationSteps .step2
+{
+	width: 20.5%;
+	background-position: 88% 50%;
+}
+.navigationSteps .step3
+{
+	width: 15%;
+	background-position: 80% 50%;
+}
+.navigationSteps .step4
+{
+	width: 20%;	
+	background-position: 88% 50%;
+}
+.navigationSteps .step5
+{
+	width: 18%;
+	border-right: 1px solid #47e;
+	background-image: none;
+}
+.navigationSteps .stepguide.active
+{
+	background-color: #f1f1f1;
+}
+.navigationSteps .stepguide .title
+{
+	font-size: 0.95em;
+	font-weight: bold;			
+	color: #29f;
+	display: block;
+	margin-left: 0.8em;
+	margin-bottom: -0.3em;
+}
+.navigationSteps a.stepguide.active .title
+{
+	color: #c00;
+}		
+.navigationSteps .stepguide .description
+{
+	font-size: 0.7em;
+	color: #555;
+	margin-left: 0.5em;
+}
+.navigationSteps .stepguide .num
+{
+	float: left;
+	font-size: 2.5em;
+	padding: 0;
+	font-weight: bold;
+	color: #39c;			
+	margin-top: 0.2em;
+	margin-left: -0.35em;
+}
+* html .navigationSteps .stepguide .num
+{
+	margin-left: -0.85em;
+	position: relative;
+	padding: 0.15em 0;
+}
+div.navigationSteps .stepguide.step1  .num
+{
+	margin-left: -0.05em;
+}
+.navigationSteps .stepguide.step1 .description
+{
+	margin-left: 0.1em;
+}
+.navigationSteps .stepquote, .navigationSteps .stepbook
+{
+	width: 60%;
+	float: left;
+	border: 1px solid #ddd;
+	border-top: 0 none;
+	font-size: 0.65em;
+	text-align: center;
+	letter-spacing: 0.2em;
+	color: #999;
+}
+.navigationSteps .stepbook
+{
+	width: 38.4%;
+	background-color: #eee;
+	border-left: 0 none;
+	color: #29f;
+}
+* html .navigationSteps .stepbook
+{
+	width: 38.9%;
+}
+/* END Navigation steps */
+
+
+/* START car details */
+.wizard .cardetails .specs
+{
+	margin-bottom: 2em;
+	border-collapse: collapse;
+	border-color: #ccc;
+}
+
+* html .wizard .cardetails .specs
+{
+	border-color: #fff;
+}
+
+.wizard .cardetails .description
+{
+	font-size: 0.85em;
+	width: 70%;
+	padding: 0.5em 1.5em;
+}
+
+.wizard .cardetails .image
+{
+	text-align: center;
+}
+
+.wizard .cardetails .capacity
+{
+	white-space: nowrap;
+	text-align: center;
+	padding-top: 0.6em;
+}
+
+.wizard .confirmation
+{
+	border-collapse: collapse;
+	border-color: #ccc;
+}
+
+* html .wizard .confirmation
+{
+	border-color: #fff;
+}
+
+.wizard .confirmation td
+{
+	padding-left: 0.5em;
+}
+.wizard .confirmation th
+{
+	padding: 0.3em;
+}
+.wizard .confirmation .price
+{
+	text-align: left !important;
+}
+.wizard .reservation
+{
+	background-color: #eee;
+	border: 1px solid #666;
+	padding: 0.5em;
+	font-size: 1.5em;
+	font-family: "Courier New", Courier, monospace;
+	text-align: center;
+	font-weight: bold;
+}
+.wizard .printpage
+{
+	padding: 0.5em;
+	text-align: center;
+}
+
+.wizard .final
+{
+	border: 0 none;
+	text-align: center;
+	padding: 0;
+	width: 50em;
+	background-color: white;
+	text-align: center;
+}
+.wizard .final p
+{
+	padding: 3em 0;
+	text-align: center;
+	background-color: #F0F8FF;
+	border: 1px solid #B0C4DE;
+}
+.wizard .final legend
+{
+	display: none;
+}
+
+.copyright
+{
+	padding-top: 20em;
+	font-size: 0.8em;
+	text-align: center;
+}

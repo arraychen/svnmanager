@@ -1,0 +1,225 @@
+Version 2.0.3 November 18, 2005
+==========================
+- Add AutoUpdate property to validation summary. (Wei)
+- Added Action property to TForm. (Wei)
+- CustomValidator JS no longers returns true if value is empty. (Wei)
+- Propagate attributes in TDataGridColumn. (Wei)
+- Charset() add to default formats. (Wei)
+- Updating JS library, Prototype 1.4pre1, scriptaculous-js-1.5_rc3, logger, new auto-complete text js, new javascrip compressor (from dojo). (Wei)
+- Added prado/ajax.js (new AJAX using prototype library). (Wei)
+- Added in checking for the PHP sqlite module in Blog and Phonebook examples. (Jasrags)
+- Ajax section was rewritten from scatch for php5. (Wei)
+- Fixed bug 1261030: TCallbackServer short open tag. (John)
+- Fixed bug 1262418: TFileUpload's Browse button's position is Fixed. (john)
+- Feature request 1159480: TListControl with allSelection and invertSelection functions (Equinox)
+- Feature request: TListBox -- added additional getters and setters (john)
+- Fixed bug 1262418: THtmlArea parseOptions() bug (john)
+- Fixed bug 1269975: Accessing private variable bug (john)
+- Fixed bug 1267745: TPage::registerOnSubmitStatement() method and TLinkButton (john)
+- Fixed bug 1270232: TListBox Fatal Error (john)
+- Feature request 1233492: enhance pradoSendFile in utils.php (john) - submitted by Warren
+- Fixed bug 1277737: Trim TRessourceLocator (john)
+- Fixed bug 1280436: TDropDownList setSelectedValue dynamic creation failure (john)
+
+Version 2.0.2 August 14, 2005
+==========================
+- Added basic skin/theming support (Alex)
+- Increased XHTML support. Not fully compliant yet. (Alex)
+- Fixed bug 1201777: TDataGridColumn doesn't have Parent, Container, Page (Alex)
+- Fixed bug 1197980: child control ID or property name clash with member variable name (alex)
+- Fixed bug 1197796: initSkin being called on non-TControls (Alex)
+- Fixed bug 1257652: XHTML validation for TTextBox (John)
+- Fixed bug 1257505: Dynamically created TListBox looses it's selection on event (John)
+- Fixed bug 1250291: TDataGrid doesn't keep the viewstate of nonstatic controls. (John)
+- Fixed bug 1244292: TDataGrid header dissapears on postback (John)
+- Fixed bug 1233751: TNumberFormat adds unwanted minus sign to negative values (Wei)
+- Fixed bug 1230296: TFileUpload Validation Problem (John)
+- Fixed bug 1218377: THtmlArea overwrites values of Width/Height with percentage (Carl)
+- Fixed bug 1217345: THead render error in TPage (CVS)(John)
+- Fixed bug 1214767: TCheckBox loses checked status if disabled (John)
+- Fixed bug 1204855: THead not displaying correct files (Marcus)
+- Fixed bug 1152189: Date parsing for validators (Wei)
+- Fixed bug 1151431: Lang for DatePicker and HtmlArea (Wei)
+- New client-side validators are more XHTML compliant. (Wei)
+- Added a new client-side javascript library, utilizing Prototype (Wei)
+- Moved most of Prado's client-side javascript to use the new library (Wei)
+- Validation error messages are *NOT* red by default (Wei)
+- Plus more...
+
+
+Version 2.0.1  May 3, 2005
+==========================
+- ViewState data is now hashed and may be encrypted.
+- Added THead component (by Tanus)
+- Added support of using multiple TForm's on a page (by Tanus)
+- Updated adodb to v4.61 (by Zsolt Varga)
+- Fixed the bug caused by invoking recursively dataBind() during loadViewState() in TRepeater, TDataGrid, TDataList.
+- CausesValidation of cancel button in TEditCommandColumn is default to false now.
+- TExpression, TStatements now use class members to store Expression and Statements properties, respectively.
+- Fixed bug 1192745: TSession bug with session.auto_start sat to 1
+- Fixed bug 1168241: TApplication breaks in init() on User cookie name change
+- Fixed bug 1168798: subtle TCacheManager file handle leak
+
+Version 2.0    March 14, 2005
+=============================
+- Implemented Master/Content pages
+- Modified Blog example to exploit the Master/Content feature
+- Added THiddenField control
+- Fixed bug 1160990: TRepeater/TDataList don't raise all onItemCreated events
+- Fixed bug 1157073: TNamespaceInvalidException error 
+- Fixed bug 1152189: Date parsing for validators 
+- Fixed bug 1151431: Lang for DatePicker and HtmlArea 
+- Fixed bug 1149794: TForm EnableViewState=false implies TControl error
+- Fixed bug 1143782: MessageSource_Mysql.php 
+- Fixed bug 1113938: ListControls not selecting indexes correctly 
+- Fixed bug 1111399: TFormLabel and HTML SELECT tag  
+- Fixed bug 1111394: TResourceLocator & rootURI 
+
+Version 2.0RC  January 26, 2005
+===============================
+- Added I18N, L10N support (with several relevant components)
+- Added TDataGrid, TTable, TDataList, TWizard, TRequiredListValidator controls
+- Implemented viewstate manager handler
+- Implemented enumerable property type
+- Changed the way of including a parameter file within another one
+- Added EncodeText property to controls with Text property
+- The parameter of TComponent::removeChild() is changed to component from ID
+- Control state synchronization is done in addBody() now (instead of addChild())
+- Control viewstate maintenance is now based on container-containee relationship (previously it was based on parent-child relationship)
+- TComponent::addParsedObject() is now invoked when parsing an object (previously it was addBody())
+- List control now renders values instead of indexes
+- Implemented TCollection class, Bodies property of TControl is now of type TCollection that allows insertion
+- Added Datalist, Datagrid and I18N examples
+- Implemented feature 1093392: Better package layout
+- Implemented feature 1094956: display spaces
+- Implemented feature 1102525: Module spec file
+- Fixed bug 1093843: TRepeater::getItemCount() returns wrong value
+- Fixed bug 1094219: TDateFormat patterns missing
+- Fixed bug 1093018: Translation table cache and php open tag
+- Fixed bug 1091966: Error handler doesn't make allowances for @ operator
+- Fixed bug 1100512: Controls losing viewstate
+- Fixed bug 1103937: TListControl fatal error within TDataList
+- Fixed bug 1099808: TTextBox: Slashes won't be stripped
+- Fixed visibility bug related with selection controls
+
+Version 1.7.1  December 25, 2004
+================================
+- Enhanced TCheckBoxList with several new properties
+- Implemented feature 1085108: session_cache_expire
+- Implemented feature 1084356: viewstate and session API
+- Implemented feature 1084351: locator and external template
+- Implemented feature 1091117: support for getJsPath, getCssPath, etc.
+- Fixed bug 1083835: TModule and inheritance
+- Fixed bug 1082980: ADODB bug
+- Fixed bug 1082637: TRequest::$format doesn't exist
+- Fixed bug 1085770: TValidator <span display="None" /> bug
+- Fixed bug 1088432: TListBox Error: SelectionMode property
+- Fixed bug 1088185: TCheckBoxList does not support enable property
+- Fixed bug 1086836: OnSelectionChanged bug with two TDropDownList
+- Fixed bug 1085514: TListControl: Loses viewstate when invisible
+- Fixed bug 1085511: TListControl: not working for IteratorAggregate
+- Fixed bug 1083898: Bug in TListControl
+- Fixed bug 1083676: Associative array keys not displaying correctly
+- Fixed bug 1083392: SelectedIndexes not being reset on databind.
+- Fixed bug 1082859: ViewState saving of listcontrols not working correctly.
+- Fixed bug 1082852: Bug in TListControl - datasource count issue
+- Fixed bug 1082703: Bug in TListControl, line 283
+- Fixed bug 1082701: TListControl->SelectedIndexes is read-only
+- Fixed bug 1082647: TListControl documentation
+- Fixed bug 1082578: access identifier on setText in TListItem is listed twice
+
+
+Version 1.7    December 4, 2004
+===============================
+- solved the incompatibility problem of Javascript used in validators
+- enhanced event handler binding (allow binding indirect child component events in template)
+- introduced parent-child relationship, the old one renamed to container-containee relationship
+- expression, statement tags with context being themselves
+- replaced TApplication::getInstance() with pradoGetApplication()
+- implemented handler concept in TApplication
+- added handler classes: TResourceParser, TResourceLocator, TRequest, TCacheManager, and TErrorHandler
+- defined new exception classes
+- TComponent added many properties
+- introduced module concept and implemented TModule
+- implemented application state handling
+- added AutoTrim to TTextBox
+- removed the application-level data encoding
+- instantiateTemplate will init properties
+- addChild will also load view state and synchronize life cycle of the new component
+- added blog example
+- added new components including TFormLabel, TValidatorGroup, TFileUpload, TCheckListBox, TListControl
+- added a tutorial for using validators
+
+
+Version 1.6    October 24, 2004
+===============================
+
+- Added THtmlArea component
+
+- Added TDatePicker component
+
+- Added session support.
+Added ISession interface and TSession class.
+
+- Added Auth Framework.
+Added IUser interface and TUser class.
+TApplication and TPage are modified to support the auth framework.
+
+- Updated the phonebook example to show how auth framework works.
+
+- Added an installation requirement checker script.
+
+- Tutorial and manual are updated to reflect the support of auth framework.
+
+
+Version 1.5    October 3, 2004
+==============================
+
+- Introduced the namespace concept. 
+Class files are now automatically located and loaded according to 
+include_path which can be updated by using namespaces. 
+
+- Application specification DTD changed. 
+Page types no longer need to be declared in the application specs. 
+Added support to path aliases. 
+
+- Class tree and directory structure are changed. 
+The main goal is to make TComponent a lightweight class so that 
+it can be used as base class for everything (not only just UI controls). 
+TControl now becomes the base class for components that have need 
+for presentation. TWebControl encapsulates common presentational 
+properties for HTML controls. 
+
+- Changed the way how a control is parsed as a child and rendered. 
+New methods: 
+TControl::addParsedObject 
+TControl::getAttributesToRender 
+
+- Simplified the relationships between controls. 
+Previously a component is related with others by two relationships. 
+They are now simplified to one, i.e., parent-child relationship. 
+
+- Added support for component-typed properties. 
+
+- Added support for configuring sub-properties. 
+A sub-property is a property of a property which is component-typed. 
+
+- Removed asset service. 
+I consider the performance of the asset service is too low to be usable. 
+Related functions are still kept in the framework if you want to design 
+your own asset service (should be very easy). 
+
+- Added TRepeater control and removed TForeach control. 
+TRepeater is very powerful! Check the included examples! 
+
+- Added a component encapsulating ADOdb database class. 
+
+- Added a phonebook example. 
+
+- Updated API documentations and tutorial. 
+
+
+
+Version 1.0 beta   August 23, 2004
+==================================
+- initial release of PRADO

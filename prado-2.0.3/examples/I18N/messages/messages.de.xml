@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+<!-- @author $Author: weizhuo $ -->
+<!-- @version $Id: messages.de.xml,v 1.2 2005/01/02 04:40:36 weizhuo Exp $ -->
+<file orginal="Prado Translation Editor" source-language="EN" datatype="plaintext" date="2004-12-30T18:01:17Z">
+<body>
+
+<trans-unit id="1">
+<source>PRADO Translation Editor</source>
+<target>PRADO &#xDC;bersetzungseditor</target>
+</trans-unit>
+
+<trans-unit id="2">
+<source>Source:</source>
+<target>Quelle:</target>
+</trans-unit>
+
+<trans-unit id="3">
+<source>Type:</source>
+<target>Typ:</target>
+</trans-unit>
+
+<trans-unit id="4">
+<source>Catalogue:</source>
+<target>Katalog:</target>
+</trans-unit>
+
+<trans-unit id="5">
+<source>Original string</source>
+<target>Urspr&#xFC;ngliche Zeichenkette</target>
+</trans-unit>
+
+<trans-unit id="6">
+<source>Translation</source>
+<target>&#xDC;bersetzung</target>
+</trans-unit>
+
+<trans-unit id="7">
+<source>Copyrights 2005 Xiang Wei Zhuo. All right reserved.</source>
+<target>Copyrights 2005 Xiang Wei Zhuo. Alle Rechte vorbehalten.</target>
+</trans-unit>
+
+<trans-unit id="8">
+<source>Internationlization in PRADO</source>
+<target>Internationalisierung in PRADO</target>
+</trans-unit>
+
+<trans-unit id="9">
+<source>Update Translation</source>
+<target>&#xC4;nderungen &#xFC;bernehmen</target>
+</trans-unit>
+
+<trans-unit id="10">
+<source>System error, unable to update translation.</source>
+<target>Systemfehler, &#xDC;bersetzung konnte nicht aktualisiert werden.</target>
+</trans-unit>
+
+<trans-unit id="11">
+<source>Reload</source>
+<target>Neu laden</target>
+</trans-unit>
+</body>
+</file>
+</xliff>

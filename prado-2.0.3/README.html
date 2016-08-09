@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>PRADO Component Framework for PHP 5</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<h1> PRADO Component Framework for PHP 5 </h1>
+<p> Version 2.0.3, November 18, 2005<br>
+  Copyright&copy; 2004-2005 by Qiang Xue (<a href="mailto:qiang.xue@gmail.com">qiang.xue@gmail.com</a>)<br>
+  Website: <a href="http://www.xisc.com/">http://www.xisc.com/</a></p>
+<p>PRADO is an event-driven and component-based framework for Web application 
+  development in PHP 5. </p>
+<p>Components following the PRADO protocol are highly configurable and reusable. 
+  Properties defining the basic features of a component can be configured in specifications, 
+  templates or code. New components can be developed by either inheriting an existing 
+  component class or composing several components together. The work of using 
+  a component amounts to placing the component tag on the page template, configuring 
+  component properties, and writing handler functions to respond to component 
+  events.</p>
+<p>PRADO shares many similarities with ASP.NET and other RAD tools for Windows 
+  GUI development, such as Borland Delphi. In particular, it supports event-driven 
+  programming, viewstate maintenance, javascript, template, form validations, 
+  etc.</p>
+<h2> Requirements</h2>
+<p>PRADO requires PHP 5 with SimpleXML extension. It is tested to run on Windows 
+  and Linux platform with Apache httpd, Microsoft IIS web servers.</p>
+<h2>Installation</h2>
+<ul>
+  <li> Unpack the distribution file using &quot;unzip&quot; command on Linux or 
+    &quot;winzip&quot; program on Windows.</li>
+  <li> Copy all the files and directories under the unpacked &quot;prado&quot; 
+    directory to the DocumentRoot of the Web server (or a subdirectory of that).</li>
+  <li> Browse the URL, http://&lt;Web-server-address&gt;/requirements.php, to see
+    if your Web server satisfies the requirement for using PRADO.</li>
+  <li> Browse the URL, http://&lt;Web-server-address&gt;/index.html, to see
+    this page.</li>
+  <li> The directory &quot;framework&quot; contains the core code of PRADO.</li>
+  <li>The directory &quot;docs/manual&quot; contains the PRADO API documentation 
+    in HTML format.</li>
+</ul>
+<h2>Examples</h2>
+<ul>
+  <li><a href="examples/helloworld.php">Hello, world!</a></li>
+  <li><a href="examples/hangman.php">The Hangman game</a></li>
+  <li><a href="examples/phonebook.php">A Web-based phonebook</a></li>
+  <li><a href="examples/blog.php">PRADO blog</a></li>
+  <li><a href="examples/i18n.php">Internalization (I18N) and localization (L10N) support</a></li>
+  <li><a href="examples/wizard.php">A car rental process</a></li>
+  <li><a href="examples/datalist.php">Usage of the TDataList component</a></li>
+  <li><a href="examples/datagrid.php">Usage of the TDataGrid component</a></li>
+</ul>
+<h2>Documentation</h2>
+<ul>
+  <li><a href="http://www.xisc.com/wiki/">PRADO Wiki (including several tutorials)</a></li>
+  <li><a href="docs/manual/index.html">PRADO API manual</a></li>
+</ul>
+
+<h2>Credits</h2>
+<ul>
+<li><a href="mailto:weizhuo@gmail.com">Xiang Wei Zhuo</a> - author of I18N/L10N support, author of TWizard and TRequiredListValidator, created car rental demo, solved incompatibility issues of javascript in PRADO, author of TFormLabel, TValidatorGroup, the tutorial for using validators in PRADO.</a></li>
+<li><a href="mailto:nyeholt@optushome.com.au">Marcus Nyeholt</a> - author of TListControl, TFileUpload, TCheckListBox, THead, multi-TForm support.</a></li>
+<li><a href="mailto:jrags@jasrags.net">Jason Ragsdale</a> - the PetShop demo, xisc.com maintenance</li>
+<li><a href="mailto:pimvanderzwet@gmail.com">Pim van der Zwet</a> - the PRADO requirement checker, the new design for xisc.com</li>
+<li><a href="mailto:j.todd.patrick@gmail.com">Todd Patrick</a> - in charge of documentation management</li>
+<li><a href="mailto:tim.evans@gmail.com">Tim Evans</a> - the auth framework</li>
+<li><a href="mailto:johnteag@gmail.com">John Teague</a> - in charge of PRADO v2 Maintenance Team</li>
+<li><a href="mailto:rodolfo@equinoxe.g-networks.net">Rodolfo Gonzales</a> - PRADO v2 Maintenance Team</li>
+<li><a href="mailto:carl@decart.no">Carl Mathisen</a> - PRADO v2 Maintenance Team</li>
+<li><a href="mailto:wkonkel@gmail.com">Warren Konkel</a> - PRADO v2 Maintenance Team</li>
+<li><a href="mailto:luftyluft@gmail.com">Brian Spireman</a> - PRADO v2 Maintenance Team</li>
+<li><a href="mailto:jnavratil@houston.rr.com">John Navratil</a> - PRADO v2 Maintenance Team</li>
+<li>All PRADO users - great suggestions and feedback.</li>
+</ul>
+
+<h2>Terms and Condition</h2>
+<p>PRADO is released under the BSD License.</p>
+<p>Copyright &copy; 2004-2005, Qiang Xue (<a href="mailto:qiang.xue@gmail.com">qiang.xue@gmail.com</a>)<br/>
+All rights reserved.
+</p>
+<p>
+Redistribution and use in source and binary forms, 
+with or without modification, are permitted provided 
+that the following conditions are met:
+<ul>
+<li>Redistributions of source code must retain the above 
+  copyright notice, this list of conditions and the 
+  following disclaimer. </li>
+
+<li>Redistributions in binary form must reproduce 
+  the above copyright notice, this list of conditions 
+  and the following disclaimer in the documentation 
+  and/or other materials provided with the distribution.</li>
+
+<li>Neither the name of the developer nor the names of
+  its contributors may be used to endorse or promote 
+  products derived from this software without specific 
+  prior written permission. </li>
+</ul>
+</p>
+<p>
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS 
+AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED 
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A 
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY 
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF 
+USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER 
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+POSSIBILITY OF SUCH DAMAGE.
+</p>
+</body>
+</html>

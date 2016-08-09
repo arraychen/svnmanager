@@ -1,0 +1,2 @@
+Please make sure that your SQLite database file isn't accessible via the Internet, e.g. by moving it to the svnmanager subdirectory. 
+Reading from this directory is forbidden by means of the .htaccess file.

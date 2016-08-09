@@ -1,0 +1,1528 @@
+\documentclass{book}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{parskip}
+\usepackage{makeidx}
+
+ \hfuzz     = 0.1pt
+ \hbadness  = 10000
+ \vbadness  = 10000
+ \tolerance = 10000
+
+ \textwidth      5.5in
+ \marginparwidth 1in
+ \oddsidemargin  0.0pt
+ \evensidemargin 0.0pt
+ \parsep         0.2in
+ \marginparsep   0.2in
+
+\begin{document}
+\title{PRADO v1.6 Tutorial}
+\author{Qiang Xue\\ qiang.xue@gmail.com\\ \\ Copyright 2004.\\ All Rights
+Reserved.}
+\maketitle
+
+\tableofcontents
+
+\chapter{Getting Started}
+\section{What is PRADO?}
+
+PRADO is an event-driven and component-based framework for
+developing Web applications in PHP 5. Developing a PRADO Web
+application mainly involves instantiating prebuilt component
+types, configuring them by setting their properties, responding to
+their events by writing handler functions, and composing them into
+pages for the application. It is very similar to RAD toolkits,
+such as Borland Delphi and Microsoft Visual Basic, that are used
+to develop desktop GUI applications.
+
+
+Let's use a simple example to describe the power of the PRADO
+framework. Assume we want to develop a ``login page" with PRADO.
+We will use two \verb|TTextBox| components and one \verb|TButton|
+component to represent the username input, the password input, and
+the submit button, respectively. We set the \verb|TextMode|
+property of the password component to \verb|Password|, and attach
+a \verb|login| function to the \verb|OnClick| event of the button.
+A fully functional ``login page" is then established by putting
+these components onto the page template at appropriate locations.
+The components will take care of the issues such as how to display
+to the user and how to fetch the data from the user and respond to
+his/her actions. For example, the \verb|TTextBox| components will
+show input fields to the user; the text entered into the password
+field will be hidden and can be fetched via the \verb|Text|
+property of the corresponding \verb|TTextBox| component in code;
+and when the user clicks on the submit button, the \verb|login|
+function will be automatically invoked. This is very different
+from traditional PHP programming processes in which developers are
+responsible for displaying the HTML tags of the input fields and
+the button, and they also need to interpret the form POST data to
+get the user input and determine whether the button is clicked.
+
+
+PRADO enables the ultimate reusability of code by its protocol for
+defining and using components. Some repetitive and tedious work,
+such as form field validation and page state management, can be
+handled using the provided PRADO components. Developers can also
+develop new components by either inheriting or composing from
+existing components, and the new components are ready to
+distribute.
+
+
+In summary, PRADO provides the following benefits for PHP
+programmers:
+\begin{itemize}
+
+\item reusability - Codes following the PRADO component protocol
+are highly reusable.
+
+\item ease of use - Using PRADO components are extremely easy.
+Usually they simply involve configuring component properties and
+writing event handlers.
+
+\item robustness - PRADO frees developers from writing boring,
+buggy code. They code in terms of objects, methods and properties,
+instead of URLs and query parameters. The latest PHP5 exception
+mechanism is exploited that enables line-precise error reporting.
+
+\item performance - PRADO applications are fast. PRADO implements
+a caching technique that allows the performance of PRADO
+applications to be comparable to those based on commonly used
+template engines.
+
+\item team integration - PRADO enables separation of content and
+presentation. Components, typically pages, have their content
+(logic) and presentation stored in different files.
+
+\end{itemize}
+
+There are many PHP frameworks currently. Mojavi, WACT and many
+other frameworks (such as PHP.MVC, Phrame) mainly try to establish
+a loose standard of organizing PHP programming (such as
+model-view-controller). Some of them are more oriented to
+developing content management systems and thus provide additional
+functionalities such as user management modules etc.
+
+
+Compared with these frameworks, PRADO focuses more on establishing
+a standard of reusing codes and event-driven programming. If you
+have experience on Windows programming using Visual Basic or
+Delphi, you will find Web programming with PRADO is very similar.
+Most of the time, you only need to set component properties and
+respond to component events. Higher level of code reusability,
+such as the aforementioned user management module, can be achieved
+based on PRADO components.
+
+
+The idea of PRADO was first inspired by the Apache Tapestry
+project. During its design and implementation, Borland Delphi and
+Microsoft ASP.NET play a very important role in helping me think
+and design. In fact, people having experience with ASP.NET may
+find a lot of similar aspects in PRADO.
+
+
+\section{Installation}
+
+PRADO requires PHP 5 with SimpleXML extension. It has been tested
+on Windows XP and RedHat Linux with Apache httpd and Microsoft IIS
+Web servers.
+
+
+The framework is distributed in a \verb|.zip| file. You can unpack
+it using \verb|unzip| on Linux or \verb|WinZip| on Windows.
+
+
+After the file is unpacked, a directory named \verb|prado| will be
+created under the current directory. The directory mainly contains
+the following files and directories,
+\begin{verbatim}
+ README.html            the readme file for this project
+ index.html             this has the same content as README.html
+ COPYRIGHT              copyright information for this project
+ HISTORY                version update information
+ framework/             the core code of PRADO framework
+ examples/              several PRADO examples
+ docs/                  PRADO documentation
+\end{verbatim}
+
+
+Now copy everything in \verb|prado| to the root directory of the
+Web server\footnote{You can also put these files in a subdirectory
+of the root directory, but you will have to change the URLs for
+visiting the following PRADO examples accordingly.}.
+
+
+You are done with the installation! You can now try out the three
+examples included in the PRADO distribution, ``Hello, world!", the
+Hangman Game, and the PRADO Phonebook by the following URLs,
+respectively,
+\begin{itemize}
+\item ``Hello, world!" --
+\verb|http://<Web-server-address>/examples/helloworld.php|
+
+\item the Hangman game --
+\verb|http://<Web-server-address>/examples/hangman.php|
+
+\item the PRADO phonebook --
+\verb|http://<Web-server-address>/examples/phonebook.php|
+\end{itemize}
+
+
+\section{Example: Hello, World!}
+
+In this section, we describe the ``Hello, world!'' example to give
+you a sense of PRADO application development. The example is very
+simple. It has only one page that displays a click button with
+``Click me'' text on it. When user clicks on the button, the text
+will change to ``Hello, world!''.
+
+
+We will need the following files for this task,
+\begin{itemize}
+\item \verb|helloworld.php|, the main entry to the application;
+
+\item \verb|helloworld/application.spec|, the application
+specification file;
+
+\item \verb|helloworld/HomePage.php|, the page class file;
+
+\item \verb|helloworld/HomePage.tpl|, the page template file.
+\end{itemize}
+
+
+Note, the \verb|helloworld| directory should be configured
+inaccessible to end-users because it contains sensitive
+application information.
+
+
+In the \verb|helloworld.php| file, we mainly instantiate the
+\verb|TApplication| class and starts the application, as shown in
+the following,
+\begin{verbatim}
+ <?php
+ require_once('../framework/TApplication.php');
+ $app=TApplication::getInstance('helloworld/application.spec');
+ $app->run();
+ ?>
+\end{verbatim}
+Here we assume the framework code is under \verb|../framework|
+directory.
+
+Every PRADO application should have such an entry file. The main
+difference is the parameter for \verb|getInstance| function which
+specifies the location of the application specification file.
+
+
+The \verb|application.spec| is an XML file that configures the
+application-level parameters. For this example, it contains the
+following lines,
+\begin{verbatim}
+ <?xml version="1.0" encoding="UTF-8"?>
+ <application default-page="HomePage" cache-path="">
+    <alias name="Pages" path="." />
+    <using namespace="System.Web.UI.WebControls" />
+    <using namespace="Pages" />
+ </application>
+\end{verbatim}
+
+The \verb|<alias>| directive defines path aliases. The alias
+\verb|System| is defined internally referring to the directory
+containing the framework core code. You can use path aliases to
+construct namespaces. A namespace is essentially a path to be
+added into the PHP \verb|include_path|. The \verb|<using>|
+directive specifies namespaces to be used when starting the
+application (You can use a namespace in code as well by calling
+\verb|using()| function.)
+
+The \verb|default-page| attribute of \verb|<application>|
+specifies which page is the default to load.
+
+
+The \verb|HomePage.tpl| file is the page template for HomePage. It
+contains the following lines,
+\begin{verbatim}
+ <html>
+ <head>
+ <title>Hello, world!</title>
+ </head>
+ <body>
+   <com:TForm>
+     <com:TButton Text="Click me" OnClick="clickMe" />
+   </com:TForm>
+ </body>
+ </html>
+\end{verbatim}
+It is very similar to an HTML page. The only difference is at the
+element \verb|<com:TButton>| which represents a \verb|TButton|
+component in the body. The \verb|TButton| component will be
+rendered as a form button showing ``Click me" which is specified
+by its \verb|Text| property. By setting \verb|OnClick| to
+``clickMe", we are attach the page method \verb|clickMe| to the
+\verb|OnClick| event of the button. Therefore, when the button is
+clicked by the end-user, the method \verb|clickMe| will be invoked
+automatically.
+
+
+The \verb|HomePage.php| file contains the code for defining the
+page type \verb|HomePage|, as shown in the following,
+\begin{verbatim}
+ <?php
+ class HomePage extends TPage
+ {
+    function clickMe($sender,$param)
+    {
+        $sender->Text="Hello, world!";
+    }
+ }
+ ?>
+\end{verbatim}
+
+The \verb|HomePage| class inherits from \verb|TPage| class which
+is provided in the PRADO framework and is the base class for all
+page classes. It contains only one method \verb|clickMe| which is
+an event handler function attached to the \verb|OnClick| event of
+the button mentioned in the page template. The logic here is to
+set the \verb|Text| property of the event sender, i.e., the
+button, to a string ``Hello, world!". We expect the button caption
+is changed to ``Hello, world!" upon user's clicking on it.
+
+This example is included in the PRADO distribution and can be
+accessed via the URL
+\verb|http://<Web-server-address>/examples/helloworld.php|.
+
+
+You may argue why the big fuss for such a simple task. Yes, the
+task is as easy as can be done by a few lines of PHP code.
+However, the purpose of this example is to give you a taste of
+PRADO programming, which is object-oriented, component-based, and
+event-driven. More complex tasks can be accomplished using the
+similar programming fashion, as you will see in the following
+chapters.
+
+
+\chapter{Programming with PRADO}
+
+Now let's go deeper into the PRADO framework. We will introduce
+some basic concepts of the framework and describe how to develop a
+PRADO application using existing PRADO components.
+
+
+\section{Components}
+
+According to Clemens Szyperski, ``a software component is a unit
+of composition with contextually specified interfaces and explicit
+context dependencies only. A software component can be deployed
+independently and is subject to third-party composition.''
+
+
+In PRADO, a component is an instance of \verb|TComponent| or its
+derived class. The class \verb|TComponent| is included in the
+PRADO framework which implements the mechanism of component
+\emph{properties} and \emph{events}.
+\begin{itemize}
+
+\item a property can be viewed as a public variable describing a
+specific aspect of the component, such as the background color,
+the font size, etc. Properties have types, such as \verb|string|,
+\verb|integer|, etc. Properties can be read-only or read-writable
+for other components.
+
+\item an event opens a channel that allows delegate functions to
+respond to certain activities happened to the component, such as
+mouse click, change of input text, etc.
+
+\end{itemize}
+A derived component class inherits all its ancestor classes'
+properties and events.
+
+
+A complete component class definition includes two files,
+\begin{itemize}
+\item a class file that defines the logic of the component class.
+The file mainly contains PHP codes. The file name must be the same
+as the class name.
+
+\item a specification file that defines the properties and events
+of the component class. The file is in XML format. If the
+component class does not introduce new properties and events, this
+file can be omitted. By default, this file should stay together with the
+component class file and have the same file name except the
+extension (the file extension for the class file is \verb|.php|
+and for the specification file \verb|.spec|.) You can, however,
+explicitly specify the location of the specification file by
+setting the class constant \verb|SPECIFICATION_FILE|.
+
+\end{itemize}
+
+Note, PRADO is case-sensitive. Component types, property names,
+event names, file names, and so on, are all case-sensitive.
+
+
+\subsection{Controls}
+
+A control is a PRADO component defined in addition with user
+interface. Each control has a parent and may have one or several child controls. 
+Child controls will pass their rendering results to the parent.
+A page is a top-level control that has no parent (you may consider the
+application as its parent, though). The rendering result of a page
+is directly displayed to end-users. A PRADO application is a
+collection of pages, each of which represents a hierarchical tree
+of controls via the parent-child relationship.
+
+
+The parent-child relationship can be established by templates. The
+format of a template is similar to HTML with special tags defining
+controls. If a control tag is enclosed within another control tag,
+the former is considered the child of the latter. Static text can
+also be treated as child.
+
+
+A control can have a template file specifying its user interface.
+By default, the template file should stay together 
+with the class file having the same file name with different extension
+name. For template files, the extension should be \verb|.tpl|.
+You can, however, explicitly specify the location of the template file
+by setting the class constant \verb|TEMPLATE_FILE|.
+
+
+Each control has an ID that uniquely identifies itself among the
+sibling controls. An ID path is a sequence of IDs of controls on
+the path from the context control to the target control. It can be
+used to locate a control. For example, on the \verb|HomePage|, we
+have a \verb|Menu| control which is the parent of \verb|Button|
+control. Then within the context control \verb|HomePage|, we can
+locate the \verb|Button| control by the ID path
+\verb|(Menu,Button)|. In PHP code, this is written as
+\verb|$this->Menu->Button|.
+
+
+\subsection{Instantiating Components}
+
+A component can be instantiated in two ways. One is to declare it
+in the template file of a control and the framework will
+automatically instantiate it when the control is created. The
+other is to manually instantiate it in PHP code. We call the
+former static creation and the latter dynamic creation of
+components.
+
+
+\subsubsection{Creating Components Statically}
+
+Usually only controls are statically instantiated in templates.
+
+A control is declared in a template file with component tags
+according to the following syntax,
+\begin{verbatim}
+ ......
+ <com:ComponentType ID="..." PropertyName="..." EventName="...">
+    ....body contents....
+ </com:ComponentType>
+ ......
+\end{verbatim}
+where \verb|ComponentType|, \verb|PropertyName|, and
+\verb|EventName| should be replaced by the real component class
+name, the real property names, and the real event names,
+respectively. The \verb|ID| attribute is optional. If it is
+present, the value must be unique among the IDs of the control's
+siblings; If it is absent, the PRADO framework will automatically
+allocate a unique ID for the control. It is required that
+component tags nest properly with each other and an open component
+tag be paired with a close tag, similar to that in XML.
+
+
+Note, control IDs must be strings starting with an alphabetic
+character and containing only alphanumeric characters and
+underscores.
+
+
+Be sure the initial property value string can be converted to the
+corresponding property type. There are six property types,
+currently, \verb|string|, \verb|integer|, \verb|float|,
+\verb|boolean|, \verb|array| and \verb|object|. The string format
+for the first three types are easy. The \verb|boolean| type
+accepts two kinds of string only: \verb|true| and \verb|false|.
+The \verb|array| type accepts a string in the format of
+\verb|(value1,value2,key3=>value3,...)|, just like a PHP array
+initialization. The \verb|object| is handled differently according
+how the property is defined. Some may accept a string and convert
+it to an object while some may not.
+
+
+The property values and event handlers set in specification files
+and template files are realized by the framework right after the
+corresponding components are created.
+
+
+\subsubsection{Creating Components Dynamically}
+
+PRADO also allows developers to instantiate components in PHP code
+on needs. A component can be instantiated by calling a static
+class method \verb|TApplication::createComponent($type)|, where
+\verb|$type| refers to the class name of the component to be
+created. The component can also be instantiated using the
+\verb|new| operator. The difference between these two
+instantiation methods is: the former will use caching technique to
+accelerate future instantiation of components of the same type,
+while the latter will go through all steps to instantiate a
+component every time. If your component does not use any resource
+handles such as DB connections in its constructor function, you
+should always use the former method for instantiation.
+
+If the component newly created is a control, you can add it as a
+child to another control by calling by calling the
+\verb|addChild()|. Note, if you want to given the control an ID,
+you should do so before adding it as the child because otherwise
+an implicit ID will be assigned and cannot be altered.
+
+
+\subsection{Accessing Component Properties}
+
+PHP 5 enables an elegant way to access component properties. You
+can use a component property as a member variable of the
+component. For example, to set the \verb|Text| property of a
+\verb|TButton| control, you can use \verb|$button->Text="xxx"|
+where \verb|$button| refers to the control instance. For controls,
+you can even use its ID path to access a property. For example,
+assume a \verb|HomePage| page has a child \verb|MenuBar| control
+which has a child \verb|HyperLink| control. Then, within the page
+context, you can read the \verb|NavigateUrl| property of the
+\verb|HyperLink| control by
+\verb|$this->MenuBar->HyperLink->NavigateUrl|.
+
+
+Note, due to a bug in PHP 5.0, if you want to set a value to a
+property, you should get the control first using its ID path and
+then set the property. In the above example, it needs the
+following two lines to set the \verb|NavigateUrl| property,
+\begin{verbatim}
+ $link=$this->MenuBar->HyperLink;
+ $link->NavigateUrl="...";
+\end{verbatim}
+Using \verb|$this->MenuBar->HyperLink->NavigateUrl| to set the
+property will generate an error. An alternative to overcome this
+problem is to invoke the function setting the property as follows,
+\begin{verbatim}
+ $this->MenuBar->HyperLink->setNavigateUrl("...");
+\end{verbatim}
+
+
+\subsection{Using Events}
+
+Event handlers are usually attached to the corresponding events in
+specification or templates files. Attaching an event handler in
+templates or specification is like setting initial values to
+properties. Note, the handler must be a method defined in the
+component owning the template or specification file, and it should
+follow the following signature,
+\begin{verbatim}
+ function handlerName($sender,$param)
+ {
+    ...
+ }
+\end{verbatim}
+where \verb|$sender| refers to the component triggering the event
+and \verb|$param| is the event parameter whose content depends on
+the event type.
+
+
+It is also possible to attach an event handler in code by using
+the \verb|TComponent::addEventHandler()| method.
+
+
+You can attach multiple handlers to a single event. When the event
+is triggered, all the attached handlers will be invoked
+automatically. Therefore, the event dispatching in PRADO is
+multi-casting.
+
+
+\subsection{Data Binding}
+
+Data binding is available to controls only.
+
+You can bind an expression to a component property so that when
+the \verb|dataBind()| method of the component is called, the
+property value is automatically set to the expression value. Data
+binding is extremely useful when developing data components that
+have some of their properties representing data from a data
+source. You can set up data binding in the component specification
+or template file, or you can do it in code.
+
+
+To set up a data binding in template file, configure the property
+value to a string representing a valid PHP expression with a
+\verb|#| character as prefix. For example, in a page template
+file, the following line
+\begin{verbatim}
+ <com:TLabel Text="#$this->Page->ID" />
+\end{verbatim}
+will bind the \verb|Text| property of the \verb|TLabel| component
+to the expression \verb|$this->Page->ID| which evaluates to the
+name of the page containing the component. Note, the context of
+the expression is the component itself.
+
+
+To set up a data binding in code, call the \verb|bindProperty()|
+method of the component. The \verb|#| character is not needed in
+this case.
+
+
+Note, the expressions bound to properties will only be evaluated
+and set to the properties when the \verb|dataBind()| method is
+invoked. Please refer to the documentation on \verb|dataBind()|
+for more details.
+
+
+Also note, if in a template file you need to set an initial value
+(not data binding) to a property and the value starts with the
+\verb|#| character, you should double the character, i.e.,
+\verb|PropertyName="##...."|.
+
+
+\subsection{PRADO Component Class Tree}
+
+The current PRADO distribution includes the following component
+classes. Their properties, events  and class methods are
+documented in the PRADO documentation.
+\begin{verbatim}
+TComponent
+    TAdodb
+    TControl
+        TExpression
+        TForm
+        TLiteral
+        TPage
+        TPlaceHolder
+        TRepeater
+        TRepeaterItem
+        TStatements
+        TWebControl
+            TButton
+            TCheckBox
+                TRadioButton
+            TDropDownList
+            THyperLink
+            TImage
+                TImageButton
+            TLabel
+            TLinkButton
+            TListBox
+            TPanel
+            TTextBox
+                TDatePicker
+                THtmlArea
+            TValidationSummary
+            TValidator
+                TCompareValidator
+                TCustomValidator
+                TRangeValidator
+                TRegularExpressionValidator
+                    TEmailAddressValidator
+                TRequiredFieldValidator
+\end{verbatim}
+
+
+\section{Pages}
+
+A page is an instance of \verb|TPage| or its derived classes. It
+is a top-most component that has neither parent nor container. A
+PRADO application is composed by a collection of pages.
+
+
+\subsection{Page Life Cycles}
+
+Understanding the life cycles of a page is essential to grasp
+PRADO programming.
+
+
+We first describe the concept of postback. We call a form
+submission \emph{postback} if the submission is made to the page
+containing the form. Postback can be considered an event happened
+on the client side, raised by the user. PRADO will try to identify
+which component on the server side is responsible for a postback
+event. If one is determined, for example, a \verb|TButton|, we
+call it the postback event sender.
+
+
+A page runs through several states since it is requested. When the
+page is requested due to a postback, i.e., a form submission to
+the page containing the form, it will undergo the following life
+cycles,
+\begin{enumerate}
+\item Page creation: the page and all its child components are
+recursively created. The framework sets the initial component
+property values based on their configuration in component
+specification files and template files. You can override component
+constructor functions to do some very early initialization work
+such as setting default values for some properties. Note, however,
+at this stage you should not visit other components because the
+relationships between components are not established yet.
+
+\item OnInit event: an \verb|OnInit| event is broadcast to the
+whole page hierarchy. You can override the \verb|onInit()| methods
+in components (including the page) or attach \verb|OnInit| event
+handlers to respond to this event to do some initialization work
+such as establishing database connections, etc. The relationships
+between components have been established now.
+
+\item Viewstate loading: loading the previous viewstate into the
+page. The page restores itself to the state that it showed to the
+user last time. We will explain viewstate in the next chapter.
+
+\item Post data loading: some components in the page hierarchy
+will update their properties by loading the data submitted by the
+user. For example, the \verb|TTextBox| component may have its
+\verb|Text| property updated with the text that the user entered
+in the corresponding text field.
+
+\item OnLoad event: at this stage, the page has up to date state
+that the user last seen before the submission. An \verb|OnLoad|
+event is broadcast to the whole page hierarchy. You can override
+\verb|onLoad()| functions in components (including the page) or
+attach \verb|OnLoad| event handlers to respond to this event.
+
+\item Post data loading: some components created in the
+\verb|OnLoad| stage are given a chance to load post data at this
+stage.
+
+\item Raising post data changed events: If a component has its
+data changed by the user, it will have a chance to raise an event
+indicating such a change. For example, if the user changed the
+value in the text field, the corresponding \verb|TTextBox|
+component will be raise an \verb|OnTextChanged| event. Developers
+can attach event handlers to respond to this event.
+
+\item Input validation: if the postback event sender requires
+validation, validators registered with the page will validate the
+data of their associate components.
+
+\item Postback event: a postback event is raised by the event
+sender. For example, if the postback is caused by the user
+clicking on a button, the corresponding \verb|TButton| component
+will raise the postback event \verb|OnClick|. You can attach event
+handlers to respond to this event.
+
+\item OnPreRender event: at this stage, the page has finished post
+data loading and postback event handling. An \verb|OnPreRender|
+event is broadcast to the whole page hierarchy. You can override
+\verb|onPreRender()| functions in components (including the page)
+or attach \verb|OnPreRender| event handlers to do some final work
+before page rendering.
+
+\item Viewstate saving: the viewstate of the page hierarchy is
+saved in persistent storage (e.g. a hidden field in form, session,
+database, etc.)
+
+\item Page rendering: the page and its contained components render
+themselves recursively to the user. By default, a component will
+display its body content defined in template files. You can
+override the \verb|render()| method of \verb|TComponent| to
+provide customized rendering.
+
+\item OnUnload event: the page and all its child components are
+freed from the memory. An \verb|OnUnload| event is broadcast to
+the whole page hierarchy. You can override \verb|onUnload()|
+functions in components (including the page) or attach
+\verb|OnUnload| event handlers to do some cleanup work such as
+disconnecting database connections.
+\end{enumerate}
+
+When a page is requested for the first time, the above life cycles
+are simplified. In particular, there is no viewstate loading, post
+data loading, raising post data changed events, input validation
+and postback event.
+
+
+\section{Application}
+
+Every PRADO Web application has a single instance of
+\verb|TApplication|. The singleton is mainly responsible to encode
+and decode user requests, serve page requests, and maintain
+application-level parameters.
+
+
+\subsection{Application Specification}
+
+Every PRADO application should have an application specification
+file in XML format. In the ``hello world'' example, the file is
+named as \verb|application.spec|.
+
+
+The application specification file should follow the following
+format,
+\begin{verbatim}
+ <?xml version="1.0" encoding="UTF-8"?>
+ <application default-page="..." cache-path="..."
+              session-class="..." user-class="...">
+    <alias name="..." path="..." />
+    <alias name="..." path="..." />
+    <using namespace="..." />
+    <using namespace="..." />
+    <secured page="..." role="..." />
+    <secured page="..." role="..." />
+    <parameter name="...">...</parameter>
+    <parameter name="...">...</parameter>
+    <parameter file="..." />
+ </application>
+\end{verbatim}
+
+The \verb|alias| directive defines aliases to file paths. The file
+paths can be either absolute or relative to the directory
+containing the specification file.
+
+The \verb|using| directive defines namespaces to be added to PHP
+\verb|include_path| after the application is started. A namespace
+is a dot-connected segments. The first segment refers to a path
+alias while the rest represent the subdirectories. For example,
+\verb|System.Web.UI| refers to the \verb|Web/UI/| directory under
+the framework directory. The framework has defined the alias
+\verb|System| as the framework directory. In code, you can call
+\verb|using()| function to add a namespace to \verb|include_path|.
+
+The \verb|secured| directive declares the pages that need
+authentication/authorization. The \verb|page| attribute refers to
+a page name or a pattern that page names will match against. If a
+page is secured, it means the page needs user authentication. If
+in addition the \verb|role| attribute is not empty, the page
+requires the user to be of the specified role (authorization).
+
+The \verb|parameter| directive defines user parameters. You can
+import a parameter file by setting the \verb|file| attribute of
+\verb|parameter| to the path of the parameter file. The parameter
+file format is as follows,
+\begin{verbatim}
+ <?xml version="1.0" encoding="UTF-8"?>
+ <parameters>
+    <parameter name="...">...</parameter>
+    <parameter name="...">...</parameter>
+ </parameters>
+\end{verbatim}
+
+The attribute \verb|default-page| and \verb|cache-path| refer to
+the default page type to be loaded and the path for caching
+components, respectively. If the application needs session
+support, the \verb|session-class| attribute should be set. If the
+application wants the authentication/authorization support from
+the framework, the \verb|user-class| attribute should be set.
+
+
+
+\subsection{Page Service}
+
+PRADO uses the GET variable \verb|page| to identify the requested
+page type. For example, the URL
+\begin{verbatim}
+ /examples/phonebook.php?page=AddEntryPage
+\end{verbatim}
+will request the \verb|AddEntryPage| page. If the \verb|page|
+variable is not given, the default page specified in the
+application specification will be served.
+
+
+You may use the \verb|TApplication::constructUrl()| method to
+obtain a URL requesting a page.
+
+
+
+\subsection{Data Encoding and Decoding}
+
+By default, \verb|TApplication| will HTML-encode all POST and GET
+data. That is, characters \verb|'|, \verb|"|, \verb|<|, \verb|>|,
+\verb|&| will be converted to \verb|&#039;|, \verb|&quot;|,
+\verb|&lt;|, \verb|&gt;| and \verb|&amp;|, respectively. The
+reason for doing so is to ensure these data can be entered into
+database properly and be echoed to users as they should be. If
+necessary, you may decode them in code by calling
+\verb|pradoDecodeData()| or override
+\verb|TApplication::beginRequest()| to disable the encoding.
+
+
+\section{Defining New Components}
+
+There are two ways to define new component classes: inheritance
+and composition.
+
+
+Inheritance is an O-O design concept. Derived classes customize
+some aspects of their parent classes, and may provide additional
+functionalities. In the PRADO framework, component properties and events
+are all inheritable. Derived classes may provide
+additional properties and events. Note, all component
+classes must derive from \verb|TComponent| or its derived classes.
+
+All parent properties and events will be inherited by child
+component classes.
+
+
+Composition is for component-based frameworks. In PRADO, it is
+mainly meant for controls. A new control class is defined by
+specifying some other controls as its child controls or body
+controls. The new class is responsible to coordinate the
+communications among these controls and it represents for them to
+talk to the outside. For example, we can derive a
+\verb|LabeledTextBox| control class from \verb|TControl| and put a
+\verb|TLabel| control and a \verb|TTextBox| control in its body
+content. The new class is responsible to configure the properties
+and events of its child components.
+
+
+By convention (not required), control IDs and property names
+should have their first character in each word capitalized (e.g.
+\verb|HomePage|, \verb|NavigateUrl|, \verb|LogoPict|); event names
+start with \verb|On| (e.g. \verb|OnClick|). The IDs and the names
+must be proper name strings, i.e., strings starting with an
+alphabetic character and containing only alphanumeric characters
+and underscores.
+
+
+Defining a new component (control) usually involves writing a
+component class file, a specification file, and a template file.
+In some cases the latter two files may be omitted.
+
+
+\subsection{Defining Properties}
+
+A component property is defined in the specification file for the
+component class. To define a property, use the following syntax in
+the specification file,
+\begin{verbatim}
+ <?xml version="1.0" encoding="UTF-8"?>
+ <component>
+    ......
+    <property name="<property name>"
+              get="<getter method>"
+              set="<setter method>"
+              type="<property type>"
+              default="<default value>" />
+    ......
+ </component>
+\end{verbatim}
+where \verb|name| is used to uniquely identify the property;
+\verb|get| defines the class method used to read the property;
+\verb|set| defines the class method used to write the property;
+\verb|type| defines the property type (\verb|string|,
+\verb|integer|, \verb|float|, \verb|boolean|, \verb|array| and
+\verb|object|); and \verb|default| indicates the default value of
+the property. In the above, the \verb|name| attribute is required
+and it must contain a proper name string. The signature of the
+getter method is
+\begin{verbatim}
+ function getterMethodName()
+ {
+    ....
+    return $value.
+ }
+\end{verbatim}
+If a property is not readable, do not set the \verb|get|
+attribute. The signature of the setter method is
+\begin{verbatim}
+ function setterMethodName($value)
+ {
+    // set some variable with $value
+ }
+\end{verbatim}
+If a property is not writable, do not set the \verb|set|
+attribute. The \verb|type| attribute is optional if the property
+type is \verb|string|. The property type is used to automatically
+convert the type of a property initial value when it is configured
+in a specification or a template file. The \verb|default|
+attribute is mainly used for reference purpose and is optional. If
+a property is readable, the getter method should return a default
+value when the property value is not previously set.
+
+
+You can also define a property as a component using the following
+syntax,
+\begin{verbatim}
+ <?xml version="1.0" encoding="UTF-8"?>
+ <component>
+    ......
+    <component type="component type" ID="component ID">
+        <property name="property name" value="property value"/>
+        ....
+        <event name="event name" handler="function name"/>
+        ....
+    </component>
+    ......
+ </component>
+\end{verbatim}
+where the \verb|type| attribute specifies the component class name
+and the \verb|ID| attribute is used as the property name. The
+\verb|property| elements and the \verb|event| elements specify the
+initial property values and the delegate functions for the events,
+respectively.
+
+A component-typed property will be instantiated automatically when
+the component is created.
+
+
+\subsection{Defining Events}
+
+A component event is declared in the specification file and its
+underlying mechanism is implemented in the class file. To declare
+an event, use the following syntax in the specification file,
+\begin{verbatim}
+ <?xml version="1.0" encoding="UTF-8"?>
+ <component>
+    ......
+    <event name="..." />
+    ......
+ </component>
+\end{verbatim}
+The event name must be a proper name string.
+
+
+In the class file, the following method is usually implemented
+(assuming the event name is \verb|OnClick|),
+\begin{verbatim}
+ function onClick($param)
+ {
+    $this->raiseEvent('OnClick',$this,$param);
+ }
+\end{verbatim}
+The \verb|onClick| method should be invoked by the component at
+the place where the click event really happens (c.f.
+\verb|TButton.php| in the framework). The \verb|raiseEvent| method
+is implemented in the \verb|TComponent| class which invokes all
+handler functions attached to the \verb|OnClick| event and passes
+the event parameter \verb|$param|.
+
+
+\subsection{Writing a Template File}
+
+In this section, we describe some special instructions for writing
+a template file. Templates are used for controls. Not all controls
+need templates. For example, controls like \verb|TTextBox|,
+\verb|TButton| do not have body content at all and thus they do
+not need templates. Templates are usually used for pages or
+controls defined based on composition.
+
+
+Comments in templates, i.e., \verb|<!-- ... -->| are always
+treated as static text.
+
+
+You can configure a property out of a component tag by using the
+property tag \verb|<prop:...>|. For example, you may use the
+following syntax to set the \verb|Text| property of a
+\verb|TTextBox| control in template,
+\begin{verbatim}
+ ...
+ <com:TTextBox ID="profile">
+   <prop:Text>
+     ...
+   </prop:Text>
+ </com:TTextBox>
+ ...
+\end{verbatim}
+Content between the open and close property tags are treated as a
+string assigned to the corresponding component property. This is
+very convenient when some properties need large blocks of data.
+
+
+There are three kinds of special tags that can be used in
+templates:
+\begin{itemize}
+
+ \item \verb|<%include ... %>|  --  the framework will include an external
+ file at the place of this tag before parsing the template.
+ For example, you can include a common header file for a page
+ template, \verb|<%include header.tpl %>|. The external file path must be
+ relative to the directory containing this template file.
+
+ \item \verb|<%= ... %>| -- it represents a PHP expression whose
+ result will be display at the place of this tag, e.g.,
+ \verb|<%= date('Y-M-d',time()) %>|. Note, there is no semicolon
+ needed at the end of the expression, and the context of the
+ expression is the component owning the template. You can use
+ \verb|$this| variable to refer to the component in the
+ expression. Expressions are evaluated during the rendering stage
+ of a component.
+
+ \item \verb|<% ... %>| -- it represents a list of PHP statements.
+ If any of them `echo' or `print', the result will be displayed at
+ the place of this tag. Note, every PHP statement must be
+ terminated with a semi-colon, just like the standard PHP syntax.
+ The context of these statements is the component owning the
+ template file.
+
+\end{itemize}
+
+
+You can use these special tags anywhere in the template except
+within the component tags.
+
+
+\section{Summary}
+
+In this section we summarize the process of developing a Web
+application based on PRADO.
+
+
+You first need to create two files: the application entry file and
+the application specification file. Please refer to the ``Hello,
+world!" example described at the beginning of this tutorial.
+
+
+For a complete Web application, you also need to create one or
+several pages, each of which needs at least a page class file, and
+may need in addition a template file and/or a specification file.
+In the template file, you put static texts as well as components
+according to how they should finally be delivered to the user. In
+the specification file, you define page properties, events
+and child components. They can be used in the template or in code.
+In both files, you can set initial values for the components and
+attach event handlers for events. In the page class file, you
+write event handler functions and other functions.
+
+
+Occasionally, you may want to define new components in your
+application to reuse part of your code. For example, you can
+define a \verb|SideBar| component that displays a list of menus
+based on user login information. The component can be placed in
+page templates so that they share the same functionalities and
+presentations of the \verb|SideBar| component.
+
+
+PRADO exploits the new exception feature of PHP5 to display errors
+with stack information. This allows you to pinpoint where and how
+an error happens during debugging.
+
+
+Deploying a PRADO application is extremely easy. Since the
+framework recommends using relative file paths in every aspect, if
+you do so, you only need to copy the directory containing your
+application code to the root (or its subdirectories) of the Web
+server.
+
+
+\chapter{Example: the Hangman Game}
+
+In this chapter, we will develop a Web-based Hangman Game. We will
+use it to demonstrate the usage of several PRADO components. The
+game will also show how the viewstate keeping enables great
+interactivity of a PRADO page.
+
+
+The game contains only one page that will handle the following
+situations. When the user first visits the application, it allows
+him to start the game at one of three difficulty levels, which
+simply limits the number of guesses that the user is allowed to
+miss. Once the game starts, the page will show partially filled
+out word at the top and the user can make guesses from a shrinking
+list of possible letters. If the user gives up or makes too many
+mistakes, the page will show failure message. If the user guesses
+the word right, the page will show success message. In both cases,
+the user can start the game again.
+
+
+The PRADO component types that will be used in the example
+include,
+\begin{itemize}
+\item TRadioButton: it displays a radio button on the page.
+
+\item TPanel: it displays a \verb|<div>| element on the page.
+
+\item TLabel: it displays a string on the page.
+
+\item TButton: it displays a submit button on the page.
+
+\item TLinkButton: it displays a submit hyperlink on the page.
+
+\item TForm: it displays a \verb|<form>| element on the page.
+\end{itemize}
+These component types have encapsulated many functionalities
+through their properties and events. For example, you can set
+\verb|Visible| property of \verb|TPanel| to make the whole
+\verb|<div>| either visible or not; You can write an
+\verb|OnClick| event handler for \verb|TButton| so that when the
+user clicks on the button, the handler function will be
+automatically invoked. Please refer to the PRADO API documentation
+for more details about these component types.
+
+
+Some data in the game need to be persistent during the whole game
+session. Since we only have one page, we can use viewstate instead
+of session to keep these data. In particular the following data
+have to be kept in viewstate,
+\begin{itemize}
+\item Word: the word to be guessed.
+
+\item GuessWord: the partially filled out word.
+
+\item Level: the difficulty level of the game.
+
+\item Misses: the number of wrong guesses so far.
+\end{itemize}
+They have been defined as properties of the page (it is not
+necessary, of course.)
+
+
+We need to create six files for this application. Assume the
+application will be deployed under the root directory of the Web
+server. The six files are as follows,
+\begin{itemize}
+\item \verb|hangman.php|: the main entry to the application;
+
+\item \verb|WEB-INF/hangman.spec|: the application specification
+file;
+
+\item \verb|WEB-INF/hangman/HomePage.php|: the page class file;
+
+\item \verb|WEB-INF/hangman/HomePage.spec|: the page specification
+file;
+
+\item \verb|WEB-INF/hangman/HomePage.tpl|: the page template file;
+
+\item \verb|WEB-INF/data/hangman.txt|: the data file containing
+candidate words.
+\end{itemize}
+
+
+In the following, we mainly describe the three files for
+\verb|HomePage|. Other files are very similar to those in the
+``Hello, world!" example.
+
+
+\section{HomePage.tpl}
+
+We start from the page template file. In fact, this also reflects
+how a PRADO application is developed. You start by composing PRADO
+components on a page template; you then test the page to see how
+they look and respond; finally, you fill out the code needed in
+the page class file. This is a typical RAD (Rapid Application
+Development) process.
+
+
+The template file for this example can be found in the PRADO
+distribution at \verb|examples/hangman/HomePage.tpl|.
+
+
+We can see that the template is divided into four \verb|TPanel|
+components whose IDs are \verb|startPanel|, \verb|guessPanel|,
+\verb|winPanel|, and \verb|losePanel|, respectively. Their
+visibility is determined as the game progresses.
+
+
+On the \verb|startPanel|, three \verb|TRadioButton| components are
+used that will allow the user to select a game difficult level.
+The \verb|TButton| has an \verb|OnClick| event handler
+\verb|onSelectLevel| which will be invoked if the user makes the
+selection by clicking on the button. In case the user does not
+make any selection, the \verb|TLabel| component will be used to
+show the error message.
+
+
+On the \verb|guessPanel|, three expression tags are used to
+display the \verb|GuessWord|, \verb|Misses|, and \verb|Level|
+properties of the page. There is also a long list of
+\verb|TLinkButton| components displaying letters from \verb|A| to
+\verb|Z|. They allow the user to make the guess. If the user wants
+to guess a letter, he should click on the corresponding
+\verb|TLinkButton|. Whether he guesses right or not, the
+\verb|TLinkButton| will be disabled in the following guesses.
+Note, these \verb|TLinkButton| have the same \verb|OnClick| event
+handler \verb|onGuessWord|.
+
+
+On the \verb|winPanel| and \verb|losePanel|, the success and
+failure messages are displayed. And if the user clicks on the
+\verb|TLinkButton| on the panel, the \verb|OnClick| event handler
+\verb|onStartAgain| will be invoked.
+
+
+\section{HomePage.spec}
+
+The page specification file for this example can be found at
+\verb|examples/hangman/HomePage.spec|. It simply defines the four
+page properties: \verb|Misses|, \verb|Level|, \verb|GuessWord| and
+\verb|Word|.
+
+
+\section{HomePage.php}
+
+The page class file for this example can be found at
+\verb|examples/hangman/HomePage.php|.
+
+
+The page class \verb|HomePage| extends from \verb|TPage| which is
+provided by the framework.
+
+
+The getter and setter functions are used for defining the page
+properties. Note, however, \verb|getViewState()| and
+\verb|setViewState()| functions are invoked to return and keep the
+property data, respectively. The two functions are implemented in
+the base class \verb|TComponent| of \verb|TPage|. They are the
+main routines for viewstate maintenance. Data stored in viewstate
+will be persistent during the postbacks of the page.
+
+
+Next, four event handler functions are implemented:
+\verb|onSelectLevel()|, \verb|onGuessWord()|, \verb|onGiveUp()|
+and \verb|onStartAgain()|. They correspond to the \verb|OnClick|
+event handlers attached in the page template file. We will not go
+into details on these functions as they are very straightforward.
+
+
+You can now try out the game by visiting the URL:\\
+\verb|http://<Web-server-address>/examples/hangman.php|.
+
+
+\chapter{Advanced Topics}
+
+\section{Viewstate Maintenance}
+
+The viewstate of a component refers to the data in the component
+that should be kept during a round-trip of a postback. For
+example, if a user changes the font color of a component on a
+page, he may expect to see the same font color if the page is
+returned to him again and again for other reasons. In desktop GUI
+programming, this is not a difficult task, but that is not the
+case in Web programming the Web server does not keep the page
+state in memory. PRADO borrows the concept of viewstate from
+ASP.NET to solve this problem.
+
+
+To make some data persistent via viewstate, call
+\verb|getViewState()| and \verb|setViewState()| methods
+implemented in the \verb|TComponent| class. You can keep many
+types of data including objects in viewstate except those
+represent resource handles, such as database connections.
+
+
+PRADO stores viewstate via a hidden field in a form returned to
+the user. When the user postbacks the page, the viewstate data is
+extracted from the submitted hidden field and the previous page
+state is restored. You can customize the viewstate storage method
+by overriding the \verb|loadPageStateFromPersistenceMedium()| and
+\verb|savePageStateToPersistenceMedium()| methods of \verb|TPage|.
+For example, you can store the viewstate in session data or in
+database to avoid transmission of bulky viewstate data via hidden
+field.
+
+
+\section{Session}
+
+Session is used to keep state across different pages, which is
+different from viewstate maintenance that only keeps state between
+posts to the same page.
+
+To use session, declare a session class in the application
+specification file. The session class must implement the
+\verb|ISession| interface. You may use the included
+\verb|System.Security.TSession| class which is a basic
+implementation of \verb|ISession| encapsulating the well known
+\verb|$_SESSION| variable. You can also write your own session
+class that handles session differently (e.g. saving session to
+DB).
+
+If a session class is declared, the corresponding session object
+will be created before the requested page is created. The page
+class \verb|TPage| has the property \verb|Session| that provides
+convenient access to the session object.
+
+
+\section{Authentication and Authorization}
+
+PRADO provides an authentication/authorization framework that
+supports authenticating page visitors and determining whether they
+are authorized to access the pages.
+
+A user object plays the central role in the auth framework. The
+visitor is authenticated if he passes certain identity check and
+obtains a valid identity representation at the server side (e.g.
+login). The user object represents such an identity. Besides the
+identity check, some pages require additional security check to
+make sure if the identity is authorized to access them.
+
+The auth framework supports a role-based authorization. A page, if
+it is declared secured in the application specification, the
+framework will make sure that its visitors are authenticated
+before accessing the page. If a role is specified in addition, the
+framework will further make sure that the authenticated user is of
+the specified role. Afterwards, the page is given a chance to do
+customized authorization. In case the authentication or the
+authorization fails, \verb|onAuthenticationRequired| or
+\verb|onAuthorizationRequired| method of the user object will be
+invoked, respectively, which can display appropriate error
+messages or redirect the user browser to a login page.
+
+The user object is persistent across different page requests using
+session. Therefore, a session class must be declared in order to
+use the auth framework. Since the user object is stored in the
+session, you can use it to carry data across pages.
+
+To use the auth framework, declare a user class in the application
+specification file. The user class must implement the \verb|IUser|
+interface. A good start is the included
+\verb|System.Security.TUser|.
+
+The included phonebook example shows how the auth framework works.
+
+
+\section{Form Validation}
+
+PRADO provides an easy way to do form validation, which is usually
+very tedious and repetitive work in traditional PHP programming.
+There is a set of validator components provided in the PRADO
+distribution. These validators allow both client and server sides
+validations on user data. We elaborate their usage by an example
+as follows.
+
+
+Assume we want to create a user registration page. The page will
+ask the user to choose a username and a password for the new
+account. The password is required to be entered twice to avoid
+errors. In addition, the username and the password must contain
+only alphanumeric characters and their lengths must be at least 3
+and 6, respectively.
+
+
+To accomplish this task, we create a page with the following
+template,
+\begin{verbatim}
+ ...
+ <com:TForm>
+ ...
+ Username:
+ <com:TTextBox ID="username" />
+ <com:TRequiredFieldValidator
+      ControlToValidate="username"
+      ErrorMessage="You must choose a username." />
+ <com:TRegularExpressionValidator
+      ControlToValidate="username"
+      RegularExpression="[\w]{3,}"
+      ErrorMessage="Username must ...." />
+ <br/>
+ Password:
+ <com:TTextBox ID="password" TextMode="Password" />
+ <com:TRequiredFieldValidator
+      ControlToValidate="password"
+      ErrorMessage="You must choose a password." />
+ <com:TRegularExpressionValidator
+      ControlToValidate="password"
+      RegularExpression="[\w]{6,}"
+      ErrorMessage="Password must ...." />
+ <br/>
+ Repeat Password:
+ <com:TTextBox ID="password2" TextMode="Password" />
+ <com:TRequiredFieldValidator
+      ControlToValidate="password2"
+      ErrorMessage="Please re-type your password." />
+ <com:TCompareValidator
+      ControlToValidate="password2"
+      ControlToCompare="password"
+      ErrorMessage="Your password entries did not match." />
+ <br/>
+ <com:TButton Text="Register" />
+ ...
+ </com:TForm>
+ ...
+\end{verbatim}
+
+
+The above template will allow the page to do user input validation
+on both client and server sides (assuming the browser allows
+javascript). No additional code is needed! In case the validation
+fails, the form will not be submitted and error message are
+displayed.
+
+
+You can disable the client side validation by setting the
+\verb|EnableClientScript| property of the validators to false in
+the template. In this case, you can determine whether the
+validation succeeds by checking the \verb|IsValid| property of the
+page in or after the \verb|OnLoad| event.
+
+
+\section{Caching}
+
+The PRADO framework provides a caching technique to improve the
+performance of PRADO applications. Each component type, if it has
+been instantiated before, will have a file stored under the cache
+directory. The file contains a serialized instance of the
+component. Any future creation of the same typed component will be
+unserialized from the file. This greatly reduces the time in
+creating a component from scratch which needs to parse several XML
+specification files and template files.
+
+
+To enable the caching, set a value to the \verb|cache-path|
+attribute of \verb|application| in the application specification.
+The value must be a directory that is writable by the Web server.
+The path can be either absolute or relative to the directory
+containing the application specification file.
+
+To disable the caching, simply set an empty string to the
+\verb|cache-path| attribute.
+
+Note, you should remove all cache files if you make any changes to
+the corresponding component files or move them to different
+directories. They will be automatically regenerated upon new
+requests. Therefore, do not enable the caching during the
+application development.
+
+
+\section{Customizing TApplication}
+
+The \verb|TApplication| class can be extended. Several of the
+\verb|TApplication| methods are ready to be overridden. For
+example, you may want to override the \verb|beginRequest()| method
+to provide your own way of preprocessing of request data. Please
+refer to the PRADO documentation for more details.
+
+
+\chapter{License and Support}
+
+The PRADO framework is freeware. It is released under the terms of
+the following BSD License.
+
+Copyright (c) 2004, Qiang Xue (qiang.xue@gmail.com)
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+\begin{itemize}
+
+\item Redistributions of source code must retain the above
+copyright notice, this list of conditions and the following
+disclaimer.
+
+\item Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided
+with the distribution.
+
+\item Neither the name of the developer nor the names of its
+contributors may be used to endorse or promote products derived
+from this software without specific prior written permission.
+\end{itemize}
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+
+You may seek support or join the discussion by participating in
+the forum at \verb|http://www.xisc.com/|.
+
+We would like to welcome participants to join this work.
+
+Thank you!
+
+\end{document}

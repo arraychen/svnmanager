@@ -1,0 +1,83 @@
+In order to get SVNManager up and running on your web server you need to proceed the following 
+steps:
+
+1. Make sure your server answers to the following requirements:
+
+	A Linux or Windows Web server, running:
+		- Apache 2 web server				
+		- Subversion SVNWebDAV for Apache 
+		- MySQL database or PHP5 SQLite support (standard)
+		- PHP5
+		- PHP Pear with VersionControl_SVN package (alpha)
+		
+	Apache:								http://www.apache.org
+	Subversion:							http://subversion.tigris.org
+	MySQL:								http://www.mysql.org
+	PHP:								http://www.php.net
+	PHP pear (with VersionControl_SVN):	http://pear.php.net
+	
+2. Unpack the SVNManager package somewhere in your web server directory
+	
+	*** It is no longer necessary to include the js directory in your web server's root path!
+	
+3. Edit the config.php according to your situation (config.php.linux is a Linux template and 
+   config.php.win is a Windows template. Please copy correct template over config.php):
+	
+	a. Enter language variable
+
+	b. Enter the locations of the Subversion command line tools and the Apache
+	htpassword tool on your system.
+	
+	c. Enter the location of the Subversion repository folder, the Apache htpassword file
+	and the Subversion access file. Also enter location where svn can write its config files.
+	
+		IMORTANT: 
+		
+		These files and folders need to be readable and writeable by the user that
+		is running the Apache server! 
+
+		You must start with an empty repository folder, because SVNManager will overwrite 
+		existing folders when you create them via SVNManager. If you want to add existing 
+		repositories, dump them, see Subversion manual and load them via SVNManager, or use
+		the Import function.
+	
+	d. Enter the address of your smtp server
+	
+	f. Enter the Data Source Name of the back end database:
+		
+		This can either be the location of a mysql database, e.g. on your system or
+		a SQLlite database on your webserver. 
+		
+		In case of MySQL you need to create an empty database yourself and, if
+		necessary create a user for accessing this database. The tables of this
+		database will be created automatically at the first time you start SVNManager.
+		
+		In case of the SQLite database you need to make sure that the user that is
+		running the web server has write access to the location where your database
+		resides. When you start SVNManager the first time, the SQLlite database will
+		be created automatically. Further, the location shouldn't be accessible to the
+		Internet and therefore the 'svnmanager' subdirectory is suggested, since read
+		access is restricted by means of a .htaccess file!  
+		
+	g.	Enter the login data of a temporary administrator account
+		
+		This account can be used to login the first time. This account will be disabled
+		after you have created a user with SVNManager, with administrator privileges.
+		
+		*** The first thing you should do after installing SVNManager, is creating an
+		user with administrator privileges ***
+		
+4. Browse to the URL of SVNManager on your Server
+	a. Login with the temporary administrator account 
+	
+	b. Create an new user with administrator privileges ('Add' Button)
+	
+
+Note: This web application is made with help of the PRADO:
+"PRADO is a component-based and event-driven Web programming framework for PHP 5."
+
+see http://www.pradosoft.com
+
+
+Regards,
+M. Verkerk 

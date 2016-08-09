@@ -1,0 +1,1689 @@
+                             -------------------
+                             PRADO v1.7 Tutorial
+                             -------------------
+                                  Qiang Xue
+                             qiang.xue@gmail.com
+                             --------------------
+                               Copyright 2004.
+                             All Rights Reserved.
+
+Getting started
+~~~~~~~~~~~~~~~
+
+* What is PRADO?
+~~~~~~~~~~~~~~~~
+
+  PRADO is an event-driven and component-based framework for developing Web
+  applications in PHP 5. Developing a PRADO Web application mainly involves
+  instantiating prebuilt component types, configuring them by setting their
+  properties, responding to their events by writing handler functions, and
+  composing them into pages for the application. It is very similar to RAD
+  toolkits, such as Borland Delphi and Microsoft Visual Basic, that are used
+  to develop desktop GUI applications.
+
+  Let's use a simple example to describe the power of the PRADO framework.
+  Assume we want to develop a "login page" with PRADO. We will use two
+  <<<TTextBox>>> components and one <<<TButton>>> component to represent the
+  username input, the password input, and the submit button, respectively. We
+  set the <<<TextMode>>> property of the password component to <<<Password>>>,
+  and attach a <<<login>>> function to the <<<OnClick>>> event of the button.
+  A fully functional "login page" is then established by putting these
+  components onto the page template at appropriate locations. The components
+  will take care of the issues such as how to display to the user and how to
+  fetch the data from the user and respond to his/her actions. For example,
+  the <<<TTextBox>>> components will show input fields to the user; the text
+  entered into the password field will be hidden and can be fetched via the
+  <<<Text>>> property of the corresponding <<<TTextBox>>> component in code;
+  and when the user clicks on the submit button, the <<<login>>> function will
+  be automatically invoked. This is very different from traditional PHP
+  programming processes in which developers are responsible for displaying the
+  HTML tags of the input fields and the button, and they also need to
+  interpret the form POST data to get the user input and determine whether the
+  button is clicked.
+
+  PRADO enables the ultimate reusability of code by its protocol for defining
+  and using components. Some repetitive and tedious work, such as form field
+  validation and page state management, can be handled using the provided
+  PRADO components. Developers can also develop new components by either
+  inheriting or composing from existing components, and the new components are
+  ready to distribute.
+
+  In summary, PRADO provides the following benefits for PHP programmers:
+
+      * <<Reusability>> - Codes following the PRADO component protocol are
+        highly reusable.
+
+      * <<Ease of use>> - Using PRADO components are extremely easy. Usually
+        they simply involve configuring component properties and writing event
+        handlers.
+
+      * <<Robustness>> - PRADO frees developers from writing boring, buggy
+        code. They code in terms of objects, methods and properties, instead
+        of URLs and query parameters. The latest PHP5 exception mechanism is
+        exploited that enables line-precise error reporting.
+
+      * <<Performance>> - PRADO applications are fast. PRADO implements a
+        caching technique that allows the performance of PRADO applications to
+        be comparable to those based on commonly used template engines.
+
+      * <<Team integration>> - PRADO enables separation of content and
+        presentation. Components, typically pages, have their content (logic)
+        and presentation stored in different files. The introduction of module
+        concept facilitates task division and centralization of logic and
+        data.
+
+  There are many PHP frameworks currently. Mojavi, WACT and many other
+  frameworks (such as PHP.MVC, Phrame) mainly try to establish a loose
+  standard of organizing PHP programming (such as model-view-controller). Some
+  of them are more oriented to developing content management systems and thus
+  provide additional functionalities such as user management modules etc.
+
+  Compared with these frameworks, PRADO focuses more on establishing a
+  standard of reusing codes and event-driven programming. If you have
+  experience with Windows programming using Visual Basic or Delphi, you will
+  find Web programming with PRADO is very similar. Most of the time, you only
+  need to set component properties and respond to component events. Higher
+  level of code reusability, such as the aforementioned user management
+  module, can be achieved based on PRADO components.
+
+  The idea of PRADO was first inspired by the Apache Tapestry project. During
+  its design and implementation, Borland Delphi and Microsoft ASP.NET play a
+  very important role in helping me think and design. In fact, people having
+  experience with ASP.NET may find a lot of similar aspects in PRADO.
+
+* Installation
+~~~~~~~~~~~~~~
+
+  PRADO requires PHP 5 with SimpleXML extension. It has been tested on Windows
+  XP and RedHat Linux with Apache httpd and Microsoft IIS Web servers.
+
+  The framework is distributed in a <<<.zip>>> file. You can unpack it using
+  <<<unzip>>> on Linux or <<<WinZip>>> on Windows.
+
+  After the file is unpacked, a directory named <<<prado>>> will be created
+  under the current directory. The directory mainly contains the following
+  files and directories,
+
+------------------------------------------------------------------------------
+ README.html            the readme file for this project
+ index.html             this has the same content as README.html
+ COPYRIGHT              copyright information for this project
+ HISTORY                version update information
+ framework/             the core code of PRADO framework
+ examples/              several PRADO examples
+ docs/                  PRADO documentation
+------------------------------------------------------------------------------
+
+  Now copy everything in <<<prado>>> to the root directory of the Web server.
+  You can also put these files in a subdirectory of the root directory, but
+  you will have to change the URLs for visiting the following PRADO examples
+  accordingly.
+
+  You are done with the installation! You can now try out the four examples
+  included in the PRADO distribution, "Hello, world!", the Hangman Game, the
+  PRADO Phonebook and the PRADO Blog by the following URLs, respectively,
+
+      * "Hello, world!" --
+        <<<http://\<Web-server-address\>/examples/helloworld.php>>>
+
+      * the Hangman game --
+        <<<http://\<Web-server-address\>/examples/hangman.php>>>
+
+      * the PRADO phonebook --
+        <<<http://\<Web-server-address\>/examples/phonebook.php>>>
+
+      * the PRADO blog --
+        <<<http://\<Web-server-address\>/examples/blog.php>>>
+
+* Example: Hello, World!
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+  In this section, we describe the "Hello, world!" example to give you a sense
+  of PRADO application development. The example is very simple. It has only
+  one page that displays a click button with "Click me" text on it. When user
+  clicks on the button, the text will change to "Hello, world!".
+
+  We will need the following files for this task,
+
+      * <<<helloworld.php>>>, the main entry to the application;
+
+      * <<<helloworld/application.spec>>>, the application specification file;
+
+      * <<<helloworld/HomePage.php>>>, the page class file;
+
+      * <<<helloworld/HomePage.tpl>>>, the page template file.
+
+  Note, the <<<helloworld>>> directory should be configured inaccessible to
+  end-users because it contains sensitive application information.
+
+  In the <<<helloworld.php>>> file, we mainly instantiate the
+  <<<TApplication>>> class and starts the application, as shown in the
+  following,
+
+------------------------------------------------------------------------------
+<?php
+ require_once('../framework/TApplication.php');
+ pradoGetApplication('helloworld/application.spec')->run();
+?>
+------------------------------------------------------------------------------
+
+  Here we assume the framework code is under <<<../framework>>> directory.
+
+  Every PRADO application should have such an entry file. The main difference
+  is the parameter for <<<pradoGetApplication>>> function which specifies the location
+  of the application specification file.
+
+  The <<<application.spec>>> is an XML file that configures the
+  application-level parameters. For this example, it contains the following
+  lines,
+
+------------------------------------------------------------------------------
+ <?xml version="1.0" encoding="UTF-8"?>
+ <application ID="helloworld">
+    <request default="HomePage" />
+    <alias name="Pages" path="." />
+    <using namespace="System.Web.UI.WebControls" />
+    <using namespace="Pages" />
+ </application>
+------------------------------------------------------------------------------
+
+  The <<<\<alias>>>\> directive defines path aliases. The alias <<<System>>>
+  is defined internally referring to the directory containing the framework
+  core code. You can use path aliases to construct namespaces. A namespace is
+  essentially a path to be added into the PHP <<<include_path>>>. The
+  <<<\<using>>>\> directive specifies namespaces to be used when starting the
+  application (You can use a namespace in code as well by calling
+  <<<using()>>> function.)
+
+  The <<<request>>> element specifies the configuration for interpretting user
+  request data. Its <<<default>>> attribute specifies <<<HomePage>>> should be
+  loaded if no page is explicitly requested by users.
+
+  The <<<HomePage.tpl>>> file is the page template for HomePage. It contains
+  the following lines,
+
+------------------------------------------------------------------------------
+ <html>
+ <head>
+ <title>Hello, world!</title>
+ </head>
+ <body>
+   <com:TForm>
+     <com:TButton Text="Click me" OnClick="clickMe" />
+   </com:TForm>
+ </body>
+ </html>
+------------------------------------------------------------------------------
+
+  It is very similar to an HTML page. The only difference is at the element
+  <<<\<com:TButton>>>\> which represents a <<<TButton>>> component in the page
+  body. The <<<TButton>>> component will be rendered as a form button showing
+  "Click me" which is specified by its <<<Text>>> property. By setting
+  <<<OnClick>>> to <<<clickMe>>>, we attach the page method <<<clickMe>>> to
+  the <<<OnClick>>> event of the button. Therefore, when the button is clicked
+  by the end-user, the method <<<clickMe>>> will be invoked automatically.
+
+  The <<<HomePage.php>>> file contains the code for defining the page type
+  <<<HomePage>>>, as shown in the following,
+
+------------------------------------------------------------------------------
+ <?php
+ class HomePage extends TPage
+ {
+    function clickMe($sender,$param)
+    {
+        $sender->Text="Hello, world!";
+    }
+ }
+ ?>
+------------------------------------------------------------------------------
+
+  The <<<HomePage>>> class inherits from <<<TPage>>> class which is provided
+  in the PRADO framework as the base class for all page classes. It contains
+  only one method <<<clickMe>>> which is the event handler function attached
+  to the <<<OnClick>>> event of the button mentioned in the page template. The
+  logic here is to set the <<<Text>>> property of the event sender, i.e., the
+  button, to a string "Hello, world!". We expect the button caption is changed
+  to "Hello, world!" upon user's clicking on it.
+
+  This example is included in the PRADO distribution and can be accessed via
+  the URL <<<http://\<Web-server-address\>/examples/helloworld.php>>>.
+
+  You may argue why the big fuss for such a simple task. Yes, the task is as
+  easy as can be done by a few lines of PHP code. However, the purpose of this
+  example is to give you a taste of PRADO programming, which is
+  object-oriented, component-based, and event-driven. More complex tasks can
+  be accomplished using the similar programming fashion, as you will see in
+  the following chapters.
+
+Programming with PRADO
+~~~~~~~~~~~~~~~~~~~~~~
+
+  Now let's go deeper into the PRADO framework. We will introduce some basic
+  concepts of the framework and describe how to develop a PRADO application
+  using existing PRADO components.
+
+* Basic concepts
+~~~~~~~~~~~~~~~~
+
+** Component
+~~~~~~~~~~~~
+
+  According to Clemens Szyperski, "a software component is a unit of
+  composition with contextually specified interfaces and explicit context
+  dependencies only. A software component can be deployed independently and is
+  subject to third-party composition."
+
+  In PRADO, a component is an instance of <<<TComponent>>> or its derived
+  class. The class <<<TComponent>>> is included in the PRADO framework which
+  implements the mechanism of component <properties> and <events>.
+
+      * a property can be viewed as a public variable describing a specific
+        aspect of the component, such as the background color, the font size,
+        etc. Properties have types, such as <<<string>>>, <<<integer>>>, etc.
+        Properties can be read-only or read-writable for other components. The
+        difference between properties and class members is that reading and
+        writing properties are implemented via getter and setter methods,
+        respectively.
+
+      * an event opens a channel that allows delegate functions to respond to
+        certain activities happened to the component, such as mouse click,
+        change of input text, etc.
+
+  A derived component class inherits all its ancestor classes' properties and
+  events.
+
+  A complete component class definition includes two files,
+
+      * a class file that defines the logic of the component class. The file
+        mainly contains PHP code. The file name must be the same as the class
+        name.
+
+      * a specification file that defines the properties and events of the
+        component class. The file is in XML format. If the component class
+        does not introduce new properties and events, this file can be
+        omitted. This file should stay together with the component class file
+        and have the same file name except the extension (the file extension
+        for the class file is <<<.php>>> and for the specification file
+        <<<.spec>>>.).
+
+** Control
+~~~~~~~~~~
+
+  A control is an instance of <<<TControl>>> or its derived class. A control
+  is a component defined in addition with user interface (called body
+  content).
+
+  A control can be associated with a template file that specifies its body
+  content. The template can contain static text, components, or controls that
+  contribute to the ultimate presentation of the template owner. The format of
+  a template is similar to that of HTML with special tags for declaring
+  components. The template file should stay together with the class file and
+  have the same file name with different extension name <<<.tpl>>>.
+
+** Page
+~~~~~~~
+
+  A page is an instance of <<<TPage>>> or its derived class. A page is a
+  top-level control that interacts directly with users. A page coordinates the
+  life cycles of the controls in its body content. (see Section for more
+  details about life cycles.)
+
+** Module
+~~~~~~~~~
+
+  A module is an instance of <<<TModule>>> or its derived class. A module is a
+  top-level component that groups a collection of pages serving for a common
+  goal. It is the central repository of logic and data among the pages in the
+  group.
+
+** Application
+~~~~~~~~~~~~~~
+
+  An application is an instance of <<<TApplication>>> or its derived class.
+  Each PRADO application has a single application instance, one or several
+  pages and may have some modules used for grouping pages. The application
+  instance coordinates handlers (see following) to satisfy user requests for
+  pages.
+
+  An application must have an application specification file describing the
+  application-level configuration, such as declaring modules, specifying
+  handlers, etc.
+
+  Call <<<pradoGetApplication()>>> to get the application singleton after it
+  has been created (mostly in the entry script file).
+
+** Handler
+~~~~~~~~~~
+
+  A handler is an object responsible for a specific application-level task.
+  Currently, PRADO defines seven types of handlers, each of which can be
+  extended by developers to provide customized functionalities. You can access
+  these handler objects by calling related getter method of
+  <<<TApplication>>>.
+
+      [session] Session handler implements the session functionalities in an
+          object-oriented way. By default, PRADO chooses <<<TSession>>> as the
+          handler which simply wraps the session functions provided in PHP
+          (session data are stored in files.) Session is disabled by default
+          in <<<TSession>>>.
+
+      [user] User handler represents a user object currently accessing the
+          application. It is persistent among multiple requests from an
+          end-user. A session handler must be specified in order to use a user
+          handler.
+
+      [cache] Cache handler is responsible for caching created components to
+          accelerate future creation of components of the same types. By
+          default, PRADO uses <<<TCacheManager>>> as the handler that can
+          cache components in both memory and file.
+
+      [request] Request handler encapsulates the user request data and is
+          reponsible for the URL parsing scheme. By default, PRADO uses
+          <<<TRequest>>> as the handler that allows two types of URL formats
+          for PRADO applications: GET-based, e.g.
+          <<</index.php?page=HomePage&param=value>>>, and PATH-based, e.g.
+          <<</index.php/page/HomePage/param/value>>>
+
+      [parser] Parser handler is responsible for parsing component
+          specification files and control template files. By default, PRADO
+          uses <<<TResourceParser>>> as the handler.
+
+      [locator] Locator handler is responsible for locating component
+          specification files and control template files. By default, PRADO
+          uses <<<TResourceLocator>>> as the handler that simply looks for the
+          file under the directory containing the component class file.
+
+      [error] Error handler is responsible for dispatching error messages to
+          various pages based on the error codes. By default, PRADO uses
+          <<<TErrorHandler>>> as the handler.
+
+** Naming rules and convention
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  PRADO is case-sensitive. Component types, property names, event names, file
+  names, and so on, are all case-sensitive.
+
+  Component types, ID's, property names, event names must be proper names. A
+  proper name is a string starting with an alphabetic character and containing
+  only alphanumeric characters and underscores. For example, <<<DataSource>>>
+  and <<<data2_source>>> are both proper names, while <<<_dataSource>>> and
+  <<<data$Source>>> are not.
+
+  By convention, component types, ID's, property names and event names are
+  words concatenated together with the first letter of each word captilized
+  (e.g. <<<ButtonName>>>, <<<OnClick>>>). It is recommended to use <<<OnXXX>>>
+  to name an event <<<XXX>>> to differentiate event names from property names.
+
+* Component relationships
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Components are related to each other, which allows you to access any other
+  component within the current component context.
+
+** Parent-child relationship
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Components are related to each other via parent-child relationship. Each
+  component has a single parent and may have one or several child components.
+  Each component has an ID property that uniquely identifies itself among the
+  sibling components.
+
+  Pages and modules are top-most components that have no parent (you may
+  consider application as its parent though.) A page or a module can thus be
+  considered a tree rooted at the page/module component with nodes being the
+  desandent components. Each component on the tree represents a sub-tree.
+
+  On a component tree, a component can be uniquely identified using its ID
+  path with respect to the tree root. For example, in the <<<HomePage>>>
+  component, we have a <<<Menu>>> component which is the parent of
+  <<<MenuItem>>> component. Then within the context <<<HomePage>>>, we can
+  locate the <<<MenuItem>>> component by the ID path <<<(Menu,MenuItem)>>>. In
+  PHP code, this is written as <<<$this-\>Menu-\>MenuItem>>>, where <<<$this>>>
+  refers to the <<<HomePage>>> component.
+
+  The parent-child relationship is established by the framework based on the
+  component specifications and templates. Any component declared in a
+  specification or a template is a child of the specification or template
+  owner component.
+
+  Since PRADO also allows creating components dynamically in code, the
+  parent-child relationship can be established in code by calling
+  <<<TComponent::addChild()>>>.
+
+** Container-containee relationship
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Controls are related to each other via an additional relationship known as
+  container-containee relationship. A control is the container of another if
+  the latter should relay its presentation to the container control. 
+
+  Pages are top-most controls that have no container (you may consider
+  application as its container though). The presentation of pages are directly
+  displayed to end-users.
+
+  The container-containee relationship is established by the framework based
+  on the control templates. A component tag that is enclosed within another
+  declares a component that is contained by another.
+
+  In code, the container-containee relationship can be established by calling
+  <<<TControl::addBody()>>>.
+
+* Instantiating components
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  A component can be instantiated in two ways. One is to declare it in a
+  component specification or template file and the framework will
+  automatically instantiate it when the control is created. The other is to
+  manually instantiate it in PHP code. We call the former static creation and
+  the latter dynamic creation of components.
+
+** Creating components statically
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  A component is statically created by declaring it in either a component
+  specification or a control template.
+
+  A component is declared in a component specification according to the
+  following syntax,
+
+------------------------------------------------------------------------------
+ <?xml version="1.0" encoding="UTF-8"?>
+ <component>
+    ......
+    <component type="component type" ID="component ID">
+        <property name="property name" value="property value"/>
+        ....
+        <event name="event name" handler="function name"/>
+        ....
+    </component>
+    ......
+ </component>
+------------------------------------------------------------------------------
+
+  where the <<<type>>> attribute specifies the component class name and the
+  <<<ID>>> attribute specifies the component ID. The <<<property>>> elements
+  and the <<<event>>> elements specify the initial property values and the
+  handler functions for the events, respectively.
+
+  A component is declared in a control template with component tags according
+  to the following syntax,
+
+------------------------------------------------------------------------------
+ ......
+ <com:ComponentType ID="..." PropertyName="..." EventName="...">
+    ....body content....
+ </com:ComponentType>
+ ......
+------------------------------------------------------------------------------
+
+  where <<<ComponentType>>>, <<<PropertyName>>>, and <<<EventName>>> should be
+  replaced by the real component class name, the real property names, and the
+  real event names, respectively. The <<<ID>>> attribute is optional. If it is
+  present, the value must be unique among the IDs of the component's siblings;
+  If it is absent, the PRADO framework will automatically allocate a unique ID
+  for the component. It is required that component tags nest properly with
+  each other and an open component tag be paired with a close tag, similar to
+  that in XML.
+
+  In both cases, the component instantiated will become a child of the
+  component owning the specification or template.
+
+  In the template case, the component instantiated will become the container
+  of any components declared directly within the body content area.
+
+  Property initial values are automatically converted by the framework from
+  strings to the corresponding property types during the assignment. There are
+  six property types, currently, <<<string>>>, <<<integer>>>, <<<float>>>,
+  <<<boolean>>>, <<<array>>> and <<<object>>>. The string format for the first
+  three types are easy. The <<<boolean>>> type accepts two kinds of string
+  only: <<<true>>> and <<<false>>>. The <<<array>>> type accepts a string in
+  the format of <<<(value1,value2,key3=\>value3,...)>>>, just like a PHP array
+  initialization. The framework will not convert the initial value for the
+  <<<object>>> type. Instead, the corresponding property setters are
+  responsible for interpretting the strings.
+
+  When declaring an event handler in a specification or template, the handler
+  must be a method of the parent component. For example, if in a page template
+  you specify <<<OnClick="onBtnClicked">>>, then <<<onBtnClicked>>> must be a
+  method of the page class.
+
+  There is an exception to the above rule, however. If the handler name
+  contains a dot, then the framework will using the name to locate an object
+  responsible for the handler, instead of using the parent component. For
+  example, <<<OnClick="Container.onBtnClicked">>> will use the
+  <<<onBtnClicked>>> method of the container component. This is particularly
+  useful when attaching an event handler to an event of a control in a
+  repeater item of a page template (because the control's parent is the
+  repeater item, not the page, so you need to use <<<Page.methodName>>> to
+  refer to a method defined in the page class.)
+
+  Property initial values and event handlers set in specification and template
+  are assigned to the corresponding properties and events after all static
+  components are instantiated. 
+
+** Creating components dynamically
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  PRADO also allows developers to instantiate components in PHP code on needs.
+  A component can be instantiated by calling the method
+  <<<TApplication::createComponent($type,$id)>>>, where <<<$type>>> refers to
+  the class name of the component to be created, and <<<$id>>> is the ID to be
+  given to the new component. The $id parameter is optional. Note, the newly
+  created component has no parent, so you may want to call
+  <<<TComponent::addChild($component)>>> to add it as a child of some
+  component. For convenience, TComponent also provides a method
+  <<<TComponent::createComponent($type,$id)>>> that will create a component
+  and add it as a child of the invoking component. The component can also be
+  instantiated using the <<<new>>> operator. The difference between these two
+  instantiation methods is: the former allows caching technique to be applied
+  to accelerate future instantiation of components of the same type, while the
+  latter will go through all steps to instantiate a component every time. If
+  your component does not use any resource handles such as DB connections in
+  its constructor function, you should always use the former method for
+  instantiation.
+
+** Creating pages and modules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Pages and modules are special components that are managed directly by the
+  application instance. A page is instantiated by the application if a user
+  requests with the page type. Modules are slightly different. They must be
+  declared in the application specification so that the application instance
+  can know which modules are available (pages are made available by using
+  certain namespaces containing the page definition). Each module has an ID,
+  just like component ID, and if a user requests a module with its ID, the
+  application will instantiate it.
+
+* Using components
+~~~~~~~~~~~~~~~~~~
+
+** Accessing properties and child components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  PHP 5 enables an elegant way to access component properties and child
+  components.
+
+  You can use a component property like a member variable of the component.
+  For example, to set the <<<Text>>> property of a <<<TButton>>> control, you
+  can use <<<$button-\>Text="xxx">>> where <<<$button>>> refers to the control
+  instance.
+
+  If the ID of a child component does not conflict with a property name, then
+  you can use the ID to access the child component in the way similar to that
+  when accessing properties. For example, assume <<<HomePage>>> page has a
+  child <<<MenuBar>>> control, then you can use <<<$homepage-\>MenuBar>>> to
+  access the child.
+
+  You can chain up a sequence of property names and component IDs to access a
+  deeply situated property or component. For example, assume <<<HomePage>>>
+  page has a child <<<MenuBar>>> control which has a child <<<HyperLink>>>
+  control. Then, the sequence <<<$page-\>MenuBar-\>HyperLink-\>NavigateUrl>>>
+  will return you the <<<NavigateUrl>>> property value of the hyperlink
+  component.
+
+  Note, due to a bug in PHP 5.0, if you want to set a value to a property, you
+  should get the corresponding object first and then set the property. In the
+  above example, it needs the following two lines to set the <<<NavigateUrl>>>
+  property,
+
+------------------------------------------------------------------------------
+ $link=$page->MenuBar->HyperLink;
+ $link->NavigateUrl="...";
+------------------------------------------------------------------------------
+
+  Using <<<$page-\>MenuBar-\>HyperLink-\>NavigateUrl>>> to set the property
+  will generate an error. An alternative to overcome this problem is to invoke
+  the setter function for the property as follows,
+
+------------------------------------------------------------------------------
+ $page->MenuBar->HyperLink->setNavigateUrl("...");
+------------------------------------------------------------------------------
+
+** Defining event handlers
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Event handlers are usually attached to the corresponding events in
+  specification or templates files. Attaching an event handler in templates or
+  specification is like setting initial values to properties. Note, the
+  handler must be a method defined by the parent component, or it must be
+  locateable via ID path.
+
+  The signature of event handlers are as follows,
+
+------------------------------------------------------------------------------
+ function handlerName($sender,$param)
+ {
+    ...
+ }
+------------------------------------------------------------------------------
+
+  where <<<$sender>>> refers to the component triggering the event and
+  <<<$param>>> is the event parameter whose content depends on the event type.
+
+  It is also possible to attach an event handler in code by using the
+  <<<TComponent::attachEventHandler()>>> method.
+
+  You can attach multiple handlers to a single event. When the event is
+  raised, all the attached handlers will be invoked automatically. Therefore,
+  the event dispatching in PRADO is multi-casting.
+
+** Data binding
+~~~~~~~~~~~~~~~
+
+  You can bind an expression to a component property so that when the
+  <<<dataBind()>>> method of the component is called, the expression is
+  evaluated and the result is assigned to the corresponding property.
+
+  Data binding is extremely useful when developing data components that have
+  some of their properties representing data from a data source. You can set
+  up data binding in the component specification or template file, or you can
+  do it in code.
+
+  To set up a data binding in template file, configure the property value to a
+  string representing a valid PHP expression with a <<<#>>> character as
+  prefix. For example, in a page template file, the following line
+
+------------------------------------------------------------------------------
+ <com:TLabel Text="#$this->Page->ID" />
+------------------------------------------------------------------------------
+
+  will bind the <<<Text>>> property of the <<<TLabel>>> component to the
+  expression <<<$this-\>Page-\>ID>>> which evaluates to the name of the page
+  containing the component.
+
+  Note, the context of the expression is the component itself.
+
+  To set up a data binding in code, call the <<<bindProperty()>>> method of
+  the component. The <<<#>>> character is not needed in this case.
+
+  Note, the expressions bound to properties will only be evaluated and set to
+  the properties when the <<<dataBind()>>> method is invoked. Please refer to
+  the manual about <<<dataBind()>>> for more details.
+
+  Also note, if in a template file you need to set an initial value (not data
+  binding) to a property and the value starts with the <<<#>>> character, you
+  should double the character, i.e., <<<PropertyName="##....">>>.
+
+* Component class tree
+~~~~~~~~~~~~~~~~~~~~~~
+
+  The current PRADO distribution includes the following component classes.
+  Their properties, events and class methods are documented in the API manual.
+
+------------------------------------------------------------------------------
+TComponent
+    TAdodb
+    TModule
+    TControl
+        TExpression
+        TForm
+        TLiteral
+        TPage
+        TPlaceHolder
+        TRepeater
+        TRepeaterItem
+        TStatements
+        TWebControl
+            TButton
+            TCheckBox
+                TRadioButton
+            TFileUpload
+            TFormLabel
+            THyperLink
+            TImage
+                TImageButton
+            TLabel
+            TLinkButton
+            TListBox
+            TListControl
+                TCheckBoxList
+                TDropDownList
+                    TListBox
+            TPanel
+            TTextBox
+                TDatePicker
+                THtmlArea
+            TValidationSummary
+            TValidator
+                TCompareValidator
+                TCustomValidator
+                TRangeValidator
+                TRegularExpressionValidator
+                    TEmailAddressValidator
+                TRequiredFieldValidator
+------------------------------------------------------------------------------
+
+* Page life cycles
+~~~~~~~~~~~~~~~~~~
+
+  Since PRADO mainly implements a page controller patter, understanding the
+  page life cycles is essential to grasp PRADO programming.
+
+  We first describe the concept of postback. We call a form submission
+  <postback> if the submission is made to the page containing the form.
+  Postback can be considered an event happened on the client side, raised by
+  the user. PRADO will try to identify which component on the server side is
+  responsible for a postback event. If one is determined, for example, a
+  <<<TButton>>>, we call it the postback event sender.
+
+  A page runs through several states since it is requested. When the page is
+  requested due to a postback, i.e., a form submission to the page containing
+  the form, it will undergo the following life cycles,
+
+      * <<Page creation>>: the page and all its child components are
+        recursively created. The framework sets the initial component property
+        values based on their configuration in component specification files
+        and template files. You can override component constructor functions
+        to do some very early initialization work such as setting default
+        values for some properties. Note, however, at this stage you should
+        not visit other components because the relationships between
+        components are not established yet.
+
+      * <<OnInit event:>> an <<<OnInit>>> event is broadcast to the whole page
+        hierarchy. You can override the <<<onInit()>>> methods in components
+        (including the page) or attach <<<OnInit>>> event handlers to respond
+        to this event to do some initialization work such as establishing
+        database connections, etc. The relationships between components have
+        been established now.
+
+      * <<Viewstate loading:>> loading the previous viewstate into the page.
+        The page restores itself to the state that it showed to the user last
+        time. We will explain viewstate in the next chapter.
+
+      * <<Post data loading:>> some components in the page hierarchy will
+        update their properties by loading the data submitted by the user. For
+        example, the <<<TTextBox>>> component may have its <<<Text>>> property
+        updated with the text that the user entered in the corresponding text
+        field.
+
+      * <<OnLoad event:>> at this stage, the page has up to date state that
+        the user last seen before the submission. An <<<OnLoad>>> event is
+        broadcast to the whole page hierarchy. You can override <<<onLoad()>>>
+        functions in components (including the page) or attach <<<OnLoad>>>
+        event handlers to respond to this event.
+
+      * <<Post data loading:>> some components created in the <<<OnLoad>>>
+        stage are given a chance to load post data at this stage.
+
+      * <<Raising post data changed events:>> If a component has its data
+        changed by the user, it will have a chance to raise an event
+        indicating such a change. For example, if the user changed the value
+        in the text field, the corresponding <<<TTextBox>>> component will be
+        raise an <<<OnTextChanged>>> event. Developers can attach event
+        handlers to respond to this event.
+
+      * <<Input validation:>> if the postback event sender requires
+        validation, validators registered with the page will validate the data
+        of their associate components.
+
+      * <<Postback event:>> a postback event is raised by the event sender.
+        For example, if the postback is caused by the user clicking on a
+        button, the corresponding <<<TButton>>> component will raise the
+        postback event <<<OnClick>>>. You can attach event handlers to respond
+        to this event.
+
+      * <<OnPreRender event:>> at this stage, the page has finished post data
+        loading and postback event handling. An <<<OnPreRender>>> event is
+        broadcast to the whole page hierarchy. You can override
+        <<<onPreRender()>>> functions in components (including the page) or
+        attach <<<OnPreRender>>> event handlers to do some final work before
+        page rendering.
+
+      * <<Viewstate saving:>> the viewstate of the page hierarchy is saved in
+        persistent storage (e.g. a hidden field in form, session, database,
+        etc.)
+
+      * <<Page rendering:>> the page and its contained components render
+        themselves recursively to the user. By default, a component will
+        display its body content defined in template files. You can override
+        the <<<render()>>> method of <<<TComponent>>> to provide customized
+        rendering.
+
+      * <<OnUnload event:>> the page and all its child components are freed
+        from the memory. An <<<OnUnload>>> event is broadcast to the whole
+        page hierarchy. You can override <<<onUnload()>>> functions in
+        components (including the page) or attach <<<OnUnload>>> event
+        handlers to do some cleanup work such as disconnecting database
+        connections.
+
+  When a page is requested for the first time, the above life cycles are
+  simplified. In particular, there is no viewstate loading, post data loading,
+  raising post data changed events, input validation and postback event.
+
+  In addition, if a module is requested together with a page, the framework
+  will invoke <<<TModule::onLoad()>>> right after the module is instantiated
+  (which happens before instantiating the page). The framework will also
+  invoke <<<TModule::onUnload()>>> before the application exits.
+
+  The following figure shows the postback life cycles (thanks Todd Patrick for
+  contributing this nice graph).
+
+[lifecycles]
+
+* Application specification
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Every PRADO application should have an application specification file in XML
+  format. In the "hello world" example, the file is named as
+  <<<application.spec>>>.
+
+  In the following, we show the application specification for the PRADO blog
+  example,
+
+------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  application specification
+  @ID (required): the ID of the application
+  @state (default=on): the state of the application.
+    If @state=on, the application is in production working.
+    If @state=off, the application is in maintenance/stop state.
+    If @state=debug, the application is in development state.
+-->
+<application ID="blog" state="debug">
+  <!-- 
+    request class (optional): the class encapsulating request info.
+    @class (default=TRequest): the request class name.
+    @default (when @class=TRequest, required): 
+	the default page name (may include module name).
+    @format (when @class=TRequest, default=get): the format for parameter 
+	representation in URL.
+      If @format=get, URL looks like: /index.php?name1=value1&name2=value2
+      If @format=path, URL looks like: /index.php/name1/value1/name2/value2
+  -->
+  <request default="Blog:ViewAllPage" format="get" />
+  <!-- 
+    user class (optional): the class representing the user object.
+      @class (required): the user class name (must implement IUser).
+  -->
+  <user class="BlogUser" />
+  <!-- 
+    session class (optional): the class responsible for session management.
+    @class (default=TSession): the session class name (must implement ISession).
+  -->
+  <session enabled="true" />
+  <!-- 
+    cache manager class (optional): class responsible for caching components
+    @class (default=TCacheManager): the cache manager class name.
+    @enabled (when @class=TCacheManager, default=false): whether to use caching
+    @path (when @class=TCacheManager, optional): the directory for saving data.
+  -->
+  <cache enabled="true" />
+  <!-- 
+    resource parser class (optional): the class responsible for parsing 
+	component specs and templates.
+    @class (default=TResourceParser): the resource parser class name.
+    <parser class="TResourceParser" />
+  -->
+  <!-- 
+    resource locator class (optional): the class responsible for locating 
+	component specs and templates.
+    @class (default=TResourceLocator): the resource locator class name.
+    <locator class="TResourceLocator" />
+  -->
+  <!-- 
+    error handling class (optional): the class responsible for handling errors.
+    @class (default=TErrorHandler): the error handling class name.
+  -->
+  <error>
+    <!--
+      If @class=TErrorHandler, the following elements are acceptable
+        <when error="ErrorName" page="PageName" /> : specify pages 
+		responsible for different errors.
+        <default page="PageName" /> : specify the page if the error is 
+		not recoganized.
+    -->
+    <when error="SiteOff" page="ErrorPage" />
+    <when error="PageNotFound" page="ErrorPage" />
+    <when error="Unauthorized" page="ErrorPage" />
+    <when error="Forbidden" page="ErrorPage" />
+    <when error="InternalError" page="ErrorPage" />
+    <default page="ErrorPage" />
+  </error>
+
+  <alias name="BlogApp" path="." />
+
+  <using namespace="System.Web.UI.WebControls" />
+    <using namespace="System.Security" />
+    <using namespace="BlogApp.global" />
+
+  <parameter name="DSN">sqlite://blog%2Fblog.db</parameter>
+
+  <module ID="User" class="DataModule">
+    <using namespace="BlogApp.UserModule" />
+    <secured page="EditPage" />
+    <parameter name="AllowNewAccount">true</parameter>
+  </module>
+
+  <module ID="Blog" class="DataModule">
+    <using namespace="BlogApp.BlogModule" />
+    <secured page="EditPage" />
+    <secured page="NewPage" />
+    <parameter name="AllowAllDelete">true</parameter>
+  </module>
+
+</application>
+------------------------------------------------------------------------------
+
+  Most elements in the above application specification are already explained
+  in the comments.
+
+  Application has a state, <<<on>>>, <<<off>>> or <<<debug>>>. The state
+  affects how error messages are displayed. The application ID is mainly used
+  as a prefix for specific session variable names (so that multiple
+  applications won't interfere with each other).
+
+  The <<<alias>>> directive defines aliases to file paths. The file paths can
+  be either absolute or relative to the directory containing the specification
+  file.
+
+  The <<<using>>> directive defines namespaces to be added to PHP
+  <<<include_path>>> after the application is started. A namespace is a
+  dot-connected segments. The first segment refers to a path alias while the
+  rest represent the subdirectories. For example, <<<System.Web.UI>>> refers
+  to the <<<Web/UI/>>> directory under the framework directory. The framework
+  has defined the alias <<<System>>> as the framework directory. In code, you
+  can call <<<using()>>> function to add a namespace to <<<include_path>>>.
+
+  The <<<secured>>> directive declares the pages that need
+  authentication/authorization. The <<<page>>> attribute refers to a page name
+  or a pattern that page names will match against. If a page is secured, it
+  means the page needs user authentication. If in addition the <<<role>>>
+  attribute is not empty, the page requires the user to be of the specified
+  role (authorization).
+
+  The <<<parameter>>> directive defines user parameters. You can import a
+  parameter file by setting the <<<file>>> attribute of <<<parameter>>> to the
+  path of the parameter file. Parameter file paths should be absolute or
+  relative to the directory containing the application specification file. Its
+  format is as follows and the explaination is similar to that for the
+  application specification,
+
+------------------------------------------------------------------------------
+ <?xml version="1.0" encoding="UTF-8"?>
+ <parameters>
+    <parameter name="...">...</parameter>
+    <parameter name="...">...</parameter>
+    <parameter file="...">...</parameter>
+ </parameters>
+------------------------------------------------------------------------------
+
+  The <<<module>>> directive defines modules recoganized by the application. A
+  module can use its own namespace, define module-level user parameters, and
+  specify which pages within the module are secured. Each module must have an
+  ID that uniquely identify itself among all available modules. The namespaces
+  available to a module and its pages are those used globally (outside of
+  <<<module>>> directives) together with those used within the <<<module>>>
+  directive. The module class and the pages must be locateable within the
+  namespaces.
+
+* Url format
+~~~~~~~~~~~~
+
+  The url format used by PRADO depends on the request handler declared in the
+  application specification. By default, <<<TRequest>>> is used, which
+  recoganize the following URL format,
+
+------------------------------------------------------------------------------
+ /examples/phonebook.php?page=AddEntryPage
+------------------------------------------------------------------------------
+
+  which represents the request for the <<<AddEntryPage>>> page. If the
+  <<<page>>> variable is not given, the default page specified in the
+  application specification will be served.
+
+  If modules are used, the format is changed slightly by prefixing the page
+  type with the module ID as follows,
+
+------------------------------------------------------------------------------
+ /examples/blog.php?page=User:NewPage
+------------------------------------------------------------------------------
+
+  If the Web server supports, TRequest also allows URL in path format like
+  following,
+
+------------------------------------------------------------------------------
+ /examples/blog.php/page/User:NewPage
+------------------------------------------------------------------------------
+
+  See documentation for TRequest for more details on how to accomplish this.
+
+  You may use the <<<TRequest::constructUrl()>>> method to obtain a URL
+  requesting a page.
+
+* Defining New Components
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  There are two ways to define new component classes: inheritance and
+  composition.
+
+  Inheritance is an O-O design concept. Derived classes customize some aspects
+  of their parent classes, and may provide additional functionalities. In the
+  PRADO framework, component properties and events are all inheritable.
+  Derived classes may provide additional properties and events. Note, all
+  component classes must derive from <<<TComponent>>> or its derived classes.
+
+  All parent properties and events will be inherited by child component
+  classes.
+
+  Composition is for component-based frameworks. In PRADO, it is mainly meant
+  for controls. A new control class is defined by specifying some other
+  controls as its child controls or body controls. The new class is
+  responsible to coordinate the communications among these controls and it
+  represents for them to talk to the outside. For example, we can derive a
+  <<<LabeledTextBox>>> control class from <<<TControl>>> and put a
+  <<<TLabel>>> control and a <<<TTextBox>>> control in its body content. The
+  new class is responsible to configure the properties and events of its child
+  components.
+
+  By convention (not required), control IDs and property names should have
+  their first character in each word capitalized (e.g. <<<HomePage>>>,
+  <<<NavigateUrl>>>, <<<LogoPict>>>); event names start with <<<On>>> (e.g.
+  <<<OnClick>>>). The IDs and the names must be proper name strings, i.e.,
+  strings starting with an alphabetic character and containing only
+  alphanumeric characters and underscores.
+
+  Defining a new component (control) usually involves writing a component
+  class file, a specification file, and a template file. In some cases the
+  latter two files may be omitted.
+
+** Defining properties
+~~~~~~~~~~~~~~~~~~~~~~
+
+  A component property is defined in the specification file for the component
+  class. To define a property, use the following syntax in the specification
+  file,
+
+------------------------------------------------------------------------------
+ <?xml version="1.0" encoding="UTF-8"?>
+ <component>
+    ......
+    <property name="<property name>"
+              get="<getter method>"
+              set="<setter method>"
+              type="<property type>"
+              default="<default value>" />
+    ......
+ </component>
+------------------------------------------------------------------------------
+
+  where <<<name>>> is used to uniquely identify the property; <<<get>>>
+  defines the class method used to read the property; <<<set>>> defines the
+  class method used to write the property; <<<type>>> defines the property
+  type (<<<string>>>, <<<integer>>>, <<<float>>>, <<<boolean>>>, <<<array>>>
+  and <<<object>>>); and <<<default>>> indicates the default value of the
+  property. In the above, the <<<name>>> attribute is required and it must
+  contain a proper name string. The signature of the getter method is
+
+------------------------------------------------------------------------------
+ function getterMethodName()
+ {
+    ....
+    return $value.
+ }
+------------------------------------------------------------------------------
+
+  If a property is not readable, do not set the <<<get>>> attribute. The
+  signature of the setter method is
+
+------------------------------------------------------------------------------
+ function setterMethodName($value)
+ {
+    // set some variable with $value
+ }
+------------------------------------------------------------------------------
+
+  If a property is not writable, do not set the <<<set>>> attribute. The
+  <<<type>>> attribute is optional if the property type is <<<string>>>. The
+  property type is used to automatically convert the type of a property
+  initial value when it is configured in a specification or a template file.
+  The <<<default>>> attribute is mainly used for reference purpose and is
+  optional. If a property is readable, the getter method should return a
+  default value when the property value is not previously set.
+
+** Defining events
+~~~~~~~~~~~~~~~~~~
+
+  A component event is declared in the specification file and its underlying
+  mechanism is implemented in the class file. To declare an event, use the
+  following syntax in the specification file,
+
+------------------------------------------------------------------------------
+ <?xml version="1.0" encoding="UTF-8"?>
+ <component>
+    ......
+    <event name="..." />
+    ......
+ </component>
+------------------------------------------------------------------------------
+
+  The event name must be a proper name string.
+
+  In the class file, the following method is usually implemented (assuming the
+  event name is <<<OnClick>>>),
+
+------------------------------------------------------------------------------
+ function onClick($param)
+ {
+    $this->raiseEvent('OnClick',$this,$param);
+ }
+------------------------------------------------------------------------------
+
+  The <<<onClick>>> method should be invoked by the component at the place
+  where the click event really happens (c.f. <<<TButton.php>>> in the
+  framework). The <<<raiseEvent>>> method is implemented in the
+  <<<TComponent>>> class which invokes all handler functions attached to the
+  <<<OnClick>>> event and passes the event parameter <<<$param>>>.
+
+** Writing a template file
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  In this section, we describe some special instructions for writing a
+  template file. Templates are used for controls. Not all controls need
+  templates. For example, controls like <<<TTextBox>>>, <<<TButton>>> do not
+  have body content at all and thus they do not need templates. Templates are
+  usually used for pages or controls defined based on composition.
+
+  Template file format is defined by the resource parser handler declared in
+  the application specification. The default handler is <<<TResourceParser>>>
+  and we will mainly describe the format that it recoganizes.
+
+  Comments in templates, i.e., <<<\<!-- ...--\>>>> are always treated as
+  static text.
+
+  You can configure a property out of a component tag by using the property
+  tag <<<\<prop:...>>>\>. For example, you may use the following syntax to set
+  the <<<Text>>> property of a <<<TTextBox>>> control in template,
+
+------------------------------------------------------------------------------
+ ...
+ <com:TTextBox ID="profile">
+   <prop:Text>
+     ...
+   </prop:Text>
+ </com:TTextBox>
+ ...
+------------------------------------------------------------------------------
+
+  Content between the open and close property tags are treated as a string
+  assigned to the corresponding component property. This is very convenient
+  when some properties need large blocks of data.
+
+  There are three kinds of special tags that can be used in templates:
+
+      * <<<\<%include ... %>>>\> -- the framework will include an external
+        file at the place of this tag before parsing the template. For
+        example, you can include a common header file for a page template,
+        <<<\<%include header.tpl %>>>\>. The external file path must be
+        relative to the directory containing this template file.
+
+      * <<<\<%= ... %>>>\> -- it represents a PHP expression whose result will
+        be display at the place of this tag, e.g., <<<\<%=
+        date('Y-M-d',time()) %>>>\>. Note, there is no semicolon needed at the
+        end of the expression, and the context of the expression is the
+        component representing the expression. Expressions are evaluated
+        during the rendering stage of a component.
+
+      * <<<\<% ... %>>>\> -- it represents a list of PHP statements. If any of
+        them <<<echo>>> or <<<print>>>, the result will be displayed at the
+        place of this tag. Note, every PHP statement must be terminated with a
+        semi-colon, just like the standard PHP syntax. The context of these
+        statements is the component representing the statements.
+
+  You can use these special tags anywhere in the template (even within a
+  regular HTML tag) except within the component tags.
+
+* Summary
+~~~~~~~~~
+
+  In this section we summarize the process of developing a Web application
+  based on PRADO.
+
+  You first need to create two files: the application entry file and the
+  application specification file. Please refer to the "Hello, world!" example
+  described at the beginning of this tutorial.
+
+  For a complete Web application, you also need to create one or several
+  pages, each of which needs at least a page class file, and may need in
+  addition a template file and/or a specification file. In the template file,
+  you put static texts as well as components according to how they should
+  finally be delivered to the user. In the specification file, you define page
+  properties, events and child components. They can be used in the template or
+  in code. In both files, you can set initial values for the components and
+  attach event handlers for events. In the page class file, you write event
+  handler functions and other functions.
+
+  Occasionally, you may want to define new components in your application to
+  reuse part of your code. For example, you can define a <<<SideBar>>>
+  component that displays a list of menus based on user login information. The
+  component can be placed in page templates so that they share the same
+  functionalities and presentations of the <<<SideBar>>> component.
+
+  PRADO exploits the new exception feature of PHP5 to display errors with
+  stack information. This allows you to pinpoint where and how an error
+  happens during debugging.
+
+  Deploying a PRADO application is extremely easy. Since the framework
+  recommends using relative file paths in every aspect, if you do so, you only
+  need to copy the directory containing your application code to the root (or
+  its subdirectories) of the Web server.
+
+Example: the Hangman Game
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  In this chapter, we will develop a Web-based Hangman Game. We will use it to
+  demonstrate the usage of several PRADO components. The game will also show
+  how the viewstate keeping enables great interactivity of a PRADO page.
+
+  The game contains only one page that will handle the following situations.
+  When the user first visits the application, it allows him to start the game
+  at one of three difficulty levels, which simply limits the number of guesses
+  that the user is allowed to miss. Once the game starts, the page will show
+  partially filled out word at the top and the user can make guesses from a
+  shrinking list of possible letters. If the user gives up or makes too many
+  mistakes, the page will show failure message. If the user guesses the word
+  right, the page will show success message. In both cases, the user can start
+  the game again.
+
+  The PRADO component types that will be used in the example include,
+
+      * TRadioButton: it displays a radio button on the page.
+
+      * TPanel: it displays a <<<\<div>>>\> element on the page.
+
+      * TLabel: it displays a string on the page.
+
+      * TButton: it displays a submit button on the page.
+
+      * TLinkButton: it displays a submit hyperlink on the page.
+
+      * TForm: it displays a <<<\<form>>>\> element on the page.
+
+  These component types have encapsulated many functionalities through their
+  properties and events. For example, you can set <<<Visible>>> property of
+  <<<TPanel>>> to make the whole <<<\<div>>>\> either visible or not; You can
+  write an <<<OnClick>>> event handler for <<<TButton>>> so that when the user
+  clicks on the button, the handler function will be automatically invoked.
+  Please refer to the PRADO API documentation for more details about these
+  component types.
+
+  Some data in the game need to be persistent during the whole game session.
+  Since we only have one page, we can use viewstate instead of session to keep
+  these data. In particular the following data have to be kept in viewstate,
+
+      * Word: the word to be guessed.
+
+      * GuessWord: the partially filled out word.
+
+      * Level: the difficulty level of the game.
+
+      * Misses: the number of wrong guesses so far.
+
+  They have been defined as properties of the page (it is not necessary, of
+  course.)
+
+  We need to create six files for this application. Assume the application
+  will be deployed under the root directory of the Web server. The six files
+  are as follows,
+
+      * <<<hangman.php>>>: the main entry to the application;
+
+      * <<<hangman/hangman.spec>>>: the application specification file;
+
+      * <<<hangman/HomePage.php>>>: the page class file;
+
+      * <<<hangman/HomePage.spec>>>: the page specification file;
+
+      * <<<hangman/HomePage.tpl>>>: the page template file;
+
+      * <<<guesswords.txt>>>: the data file containing candidate
+        words.
+
+  In the following, we mainly describe the three files for <<<HomePage>>>.
+  Other files are very similar to those in the "Hello, world!" example.
+
+* HomePage.tpl
+~~~~~~~~~~~~~~
+
+  We start from the page template file. In fact, this also reflects how a
+  PRADO application is developed. You start by composing PRADO components on a
+  page template; you then test the page to see how they look and respond;
+  finally, you fill out the code needed in the page class file. This is a
+  typical RAD (Rapid Application Development) process.
+
+  The template file for this example can be found in the PRADO distribution at
+  <<<examples/hangman/HomePage.tpl>>>.
+
+  We can see that the template is divided into four <<<TPanel>>> components
+  whose IDs are <<<startPanel>>>, <<<guessPanel>>>, <<<winPanel>>>, and
+  <<<losePanel>>>, respectively. Their visibility is determined as the game
+  progresses.
+
+  On the <<<startPanel>>>, three <<<TRadioButton>>> components are used that
+  will allow the user to select a game difficult level. The <<<TButton>>> has
+  an <<<OnClick>>> event handler <<<onSelectLevel>>> which will be invoked if
+  the user makes the selection by clicking on the button. In case the user
+  does not make any selection, the <<<TLabel>>> component will be used to show
+  the error message.
+
+  On the <<<guessPanel>>>, three expression tags are used to display the
+  <<<GuessWord>>>, <<<Misses>>>, and <<<Level>>> properties of the page. There
+  is also a long list of <<<TLinkButton>>> components displaying letters from
+  <<<A>>> to <<<Z>>>. They allow the user to make the guess. If the user wants
+  to guess a letter, he should click on the corresponding <<<TLinkButton>>>.
+  Whether he guesses right or not, the <<<TLinkButton>>> will be disabled in
+  the following guesses. Note, these <<<TLinkButton>>> have the same
+  <<<OnClick>>> event handler <<<onGuessWord>>>.
+
+  On the <<<winPanel>>> and <<<losePanel>>>, the success and failure messages
+  are displayed. And if the user clicks on the <<<TLinkButton>>> on the panel,
+  the <<<OnClick>>> event handler <<<onStartAgain>>> will be invoked.
+
+* HomePage.spec
+~~~~~~~~~~~~~~~
+
+  The page specification file for this example can be found at
+  <<<examples/hangman/HomePage.spec>>>. It simply defines the four page
+  properties: <<<Misses>>>, <<<Level>>>, <<<GuessWord>>> and <<<Word>>>.
+
+* HomePage.php
+~~~~~~~~~~~~~~
+
+  The page class file for this example can be found at
+  <<<examples/hangman/HomePage.php>>>.
+
+  The page class <<<HomePage>>> extends from <<<TPage>>> which is provided by
+  the framework.
+
+  The getter and setter functions are used for defining the page properties.
+  Note, however, <<<getViewState()>>> and <<<setViewState()>>> functions are
+  invoked to return and keep the property data, respectively. The two
+  functions are implemented in the base class <<<TComponent>>> of <<<TPage>>>.
+  They are the main routines for viewstate maintenance. Data stored in
+  viewstate will be persistent during the postbacks of the page.
+
+  Next, four event handler functions are implemented: <<<onSelectLevel()>>>,
+  <<<onGuessWord()>>>, <<<onGiveUp()>>> and <<<onStartAgain()>>>. They
+  correspond to the <<<OnClick>>> event handlers attached in the page template
+  file. We will not go into details on these functions as they are very
+  straightforward.
+
+  You can now try out the game by visiting the URL:\
+  <<<http://\<Web-server-address\>/examples/hangman.php>>>.
+
+Advanced topics
+~~~~~~~~~~~~~~~
+
+* Viewstate maintenance
+~~~~~~~~~~~~~~~~~~~~~~~
+
+  The viewstate of a component refers to the data in the component that should
+  be kept during a round-trip of a postback. For example, if a user changes
+  the font color of a component on a page, he may expect to see the same font
+  color if the page is returned to him again and again for other reasons. In
+  desktop GUI programming, this is not a difficult task, but that is not the
+  case in Web programming the Web server does not keep the page state in
+  memory. PRADO borrows the concept of viewstate from ASP.NET to solve this
+  problem.
+
+  To make some data persistent via viewstate, call <<<getViewState()>>> and
+  <<<setViewState()>>> methods implemented in the <<<TComponent>>> class. You
+  can keep many types of data including objects in viewstate except those
+  represent resource handles, such as database connections.
+
+  PRADO stores viewstate via a hidden field in a form returned to the user.
+  When the user postbacks the page, the viewstate data is extracted from the
+  submitted hidden field and the previous page state is restored. You can
+  customize the viewstate storage method by overriding the
+  <<<loadPageStateFromPersistenceMedium()>>> and
+  <<<savePageStateToPersistenceMedium()>>> methods of <<<TPage>>>. For
+  example, you can store the viewstate in session data or in database to avoid
+  transmission of bulky viewstate data via hidden field.
+
+* Session
+~~~~~~~~~
+
+  Session is used to keep state across different pages, which is different
+  from viewstate maintenance that only keeps state between posts to the same
+  page.
+
+  To use session, declare a session class in the application specification
+  file. The session class must implement the <<<ISession>>> interface. You may
+  use the included <<<System.Security.TSession>>> class which is a basic
+  implementation of <<<ISession>>> encapsulating the well known
+  <<<$_SESSION>>> variable. You can also write your own session class that
+  handles session differently (e.g. saving session to DB).
+
+  If a session class is declared, the corresponding session object will be
+  created before the requested page is created. The page class <<<TPage>>> has
+  the property <<<Session>>> that provides convenient access to the session
+  object.
+
+* Authentication and authorization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  PRADO provides an authentication/authorization framework that supports
+  authenticating page visitors and determining whether they are authorized to
+  access the pages.
+
+  A user object plays the central role in the auth framework. The visitor is
+  authenticated if he passes certain identity check and obtains a valid
+  identity representation at the server side (e.g. login). The user object
+  represents such an identity. Besides the identity check, some pages require
+  additional security check to make sure if the identity is authorized to
+  access them.
+
+  The auth framework supports a role-based authorization. A page, if it is
+  declared secured in the application specification, the framework will make
+  sure that its visitors are authenticated before accessing the page. If a
+  role is specified in addition, the framework will further make sure that the
+  authenticated user is of the specified role. Afterwards, the page is given a
+  chance to do customized authorization. In case the authentication or the
+  authorization fails, <<<onAuthenticationRequired>>> or
+  <<<onAuthorizationRequired>>> method of the user object will be invoked,
+  respectively, which can display appropriate error messages or redirect the
+  user browser to a login page.
+
+  The user object is persistent across different page requests using session.
+  Therefore, a session class must be declared in order to use the auth
+  framework. Since the user object is stored in the session, you can use it to
+  carry data across pages.
+
+  To use the auth framework, declare a user class in the application
+  specification file. The user class must implement the <<<IUser>>> interface.
+  A good start is the included <<<System.Security.TUser>>>.
+
+  The included phonebook example shows how the auth framework works.
+
+* Form validation
+~~~~~~~~~~~~~~~~~
+
+  PRADO provides an easy way to do form validation, which is usually very
+  tedious and repetitive work in traditional PHP programming. There is a set
+  of validator components provided in the PRADO distribution. These validators
+  allow both client and server sides validations on user data. We elaborate
+  their usage by an example as follows.
+
+  Assume we want to create a user registration page. The page will ask the
+  user to choose a username and a password for the new account. The password
+  is required to be entered twice to avoid errors. In addition, the username
+  and the password must contain only alphanumeric characters and their lengths
+  must be at least 3 and 6, respectively.
+
+  To accomplish this task, we create a page with the following template,
+
+------------------------------------------------------------------------------
+ ...
+ <com:TForm>
+ ...
+ Username:
+ <com:TTextBox ID="username" />
+ <com:TRequiredFieldValidator
+      ControlToValidate="username"
+      ErrorMessage="You must choose a username." />
+ <com:TRegularExpressionValidator
+      ControlToValidate="username"
+      RegularExpression="[\w]{3,}"
+      ErrorMessage="Username must ...." />
+ <br/>
+ Password:
+ <com:TTextBox ID="password" TextMode="Password" />
+ <com:TRequiredFieldValidator
+      ControlToValidate="password"
+      ErrorMessage="You must choose a password." />
+ <com:TRegularExpressionValidator
+      ControlToValidate="password"
+      RegularExpression="[\w]{6,}"
+      ErrorMessage="Password must ...." />
+ <br/>
+ Repeat Password:
+ <com:TTextBox ID="password2" TextMode="Password" />
+ <com:TRequiredFieldValidator
+      ControlToValidate="password2"
+      ErrorMessage="Please re-type your password." />
+ <com:TCompareValidator
+      ControlToValidate="password2"
+      ControlToCompare="password"
+      ErrorMessage="Your password entries did not match." />
+ <br/>
+ <com:TButton Text="Register" />
+ ...
+ </com:TForm>
+ ...
+------------------------------------------------------------------------------
+
+  The above template will allow the page to do user input validation on both
+  client and server sides (assuming the browser allows javascript). No
+  additional code is needed! In case the validation fails, the form will not
+  be submitted and error message are displayed.
+
+  You can disable the client side validation by setting the
+  <<<EnableClientScript>>> property of the validators to false in the
+  template. In this case, you can determine whether the validation succeeds by
+  checking the <<<IsValid>>> property of the page in or after the <<<OnLoad>>>
+  event.
+
+* Caching
+~~~~~~~~~
+
+  The caching is provided to improve the performance of PRADO-based
+  applications.
+
+  The caching scheme depends on the caching handler declared in the
+  application specification. By default, <<<TCacheManager>>> will be used, we
+  shall describe here how it manages the caching.
+
+  Each component type, if it has been instantiated before, will have a
+  serialized copy kept in memory. And if a path is configured for caching, the
+  copy will also be saved as a file under that directory. Any future creation
+  of the same typed component will be unserialized either from meory or from
+  the file (for the first time). This greatly reduces the time in creating a
+  component from scratch which needs to parse several XML specification files
+  and template files.
+
+  To enable the caching, set the <<<enabled>>> attribute of cache element to
+  <<<true>>> in the application specification. If the <<<path>>> attribute is
+  supplied with a path writable by the Web server, the cached result will also
+  be saved under that directory. The path can be either absolute or relative
+  to the directory containing the application specification file.
+
+  Note, you should remove all cache files if you make any changes to the
+  corresponding component files or move them to different directories. They
+  will be automatically regenerated upon new requests. Therefore, do not
+  enable the caching during the application development.
+
+* Customizing TApplication
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The <<<TApplication>>> class can be extended. Several of the
+  <<<TApplication>>> methods are ready to be overridden. For example, you may
+  want to override the <<<beginRequest()>>> method to provide your own way of
+  preprocessing of request data. Please refer to the PRADO documentation for
+  more details.
+
+Upgrading from version 1.6
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  PRADO version 1.7 is a major upgrade from version 1.6. It will cause
+  incompatibility problems. They should be easy to fix, however.
+
+  For component users, one of the major changes is the introduction of the new
+  parent-child relationship (the old one in v1.6 is renamed to
+  container-containee relationship). An immediate consequence is that,
+  components declared in a template are all child components of the template
+  owner. So much shorter ID paths can be used to address those components. For
+  example, <<<$page-\>SubmitButton>>> can be used to address a submit button
+  contained within a form. In v1.6, this would require
+  <<<$page-\>Form-\>SubmitButton>>>.
+
+  Another seemingly significant change is about expression and statements
+  special tags. In the new version, the context becomes the expression and
+  statements component itself. In v1.6, the context is the template owner.
+
+  In the new version, <<<pradoGetApplication()>>> replaces the old
+  <<<TApplication::getInstance()>>>. This also affects the entry script file.
+  Please see the included examples for more details.
+
+  Now PRADO will not encode the user submitted data. Instead, <<<TTextBox>>>
+  will encode the <<<Text>>> property before rendering. Be careful now when
+  using the user submitted data to make database queries. Single quotes
+  usually should be escaped.
+
+  The format of the application specification file is also changed a little
+  bit, as you can see in this tutorial.
+
+  A lot of properties are added to <<<TComponent>>>. To avoid name conflict,
+  <<<TAdodb.User>>> has been changed to <<<TAdodb.Username>>>.
+
+  For component developers, be aware <<<TControl::addParsedObject>>> has been
+  replaced by <<<TComponent::addBody>>>. And
+  <<<TComponent::instantiateTemplate()>>> will now invoke
+  <<<TComponent::initProperties()>>> at the end. Most importantly,
+  <<<TControl::addChild()>>> is enhanced by doing synchronizing the life
+  cycle of the new child (it may call <<<onInit>>>, <<<onLoad>>>,
+  <<<loadViewState>>> for the child component if needed.)
+
+License and support
+~~~~~~~~~~~~~~~~~~~
+
+  The PRADO framework is freeware. It is released under the terms of the
+  following BSD License.
+
+  Copyright (c) 2004, Qiang Xue (qiang.xue@gmail.com)
+
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice,
+        this list of conditions and the following disclaimer.
+
+      * Redistributions in binary form must reproduce the above copyright
+        notice, this list of conditions and the following disclaimer in the
+        documentation and/or other materials provided with the distribution.
+
+      * Neither the name of the developer nor the names of its contributors
+        may be used to endorse or promote products derived from this software
+        without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+
+  You may seek support or join the discussion by participating in the forum at
+  {{{http://www.xisc.com}<<<http://www.xisc.com>>>}}<<<.>>>
+
+  We would like to welcome participants to join this work.
+
+  Thank you!
+

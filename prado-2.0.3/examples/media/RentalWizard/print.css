@@ -1,0 +1,22 @@
+body
+{
+	padding: 0;
+}
+.wizard .navigationSteps, .wizard .navigation, .wizard .printpage, h1, .info, .copyright
+{
+	display: none;
+}
+
+.wizard .form
+{
+	border: 1px solid #999 !important;
+}
+.wizard .interary .item, .wizard .interary, .wizard .subform
+{
+	border-color: #999 !important;
+}
+
+.wizard .subform legend
+{
+	color: black;
+}

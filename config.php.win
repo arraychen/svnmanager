@@ -1,0 +1,76 @@
+<?php
+//
+//  SVNManager config.php file for Windows based servers
+//
+
+//Warning: Please set this correct, if you want support for exotic repository names 
+$lang						= "us";
+
+$htpassword_cmd     = "c:\\Progra~1\\Apache~1\\Apache2\\bin\\htpasswd";
+$svn_cmd            = "c:\\PROGRA~1\\Subversion\\bin\\svn";
+$svnadmin_cmd       = "c:\\PROGRA~1\\Subversion\\bin\\svnadmin";
+
+//Subversion locations
+$svn_config_dir			=	"c:\\svnconfig";
+$svn_repos_loc 			= 	"c:\\svn";
+$svn_passwd_file 		= 	"c:\\svn\\svn_passwd_file";
+$svn_access_file 		= 	"c:\\svn\\svn_access_file";
+
+//If the following is set, removing a repository will cause it to be
+//moved to this location rather than being deleted.
+$svn_trash_loc			=	"";
+
+// If $svnserve_user_file is defined, then SVNManager will create a
+// user/password file suitable for use with SVNSERVE
+//
+// When not set, this feature isn't enabled.
+//
+// Warning: When enabled, this mode requires that passwords are stored in the database readable!
+// 
+// Note: When is feature is enabled later, passwords need to be re-set before they are included in
+//  	 the svnserve user file.
+//
+//$svnserve_user_file		=	"c:\\svn\\svnserve_passwd_file"; 
+$svnserve_user_file = "";
+
+//SMTP Server for outgoing mail
+$smtp_server 			= 	"smtp.mailserver.net";
+
+
+//Data Source Name (only tested with mysql and sqlite databases!!)
+//
+//Either:
+// 
+//Use the createtables.sql script to build the tables in a mysql database
+// 
+// or
+//
+//An empty SQLite database will automatically be generated with the first
+//startup! 
+//
+//Please note that if you change the directory for a SQLite database that you
+//choose a location that is not accessible via web!!
+//
+
+//$dsn = "mysql://svnmanager:svnmgmpw@localhost/svnmanager";
+//The following location is not readable from internet by means of an .htaccess file
+$dsn = "sqlite://svnmanager\\svnmanager.db";						
+
+//Administrator account
+//
+//This account can be used to create a first administrator user.
+//When an administrator user is added, this account doesn't work
+//anymore!
+//
+$admin_name          = "admin";
+$admin_temp_password = "admin";
+
+// If $post_create_script is defined, then this script / command will be
+// executed after a repository is created. 
+// When the script/command is executed the one and only parameter will be
+// the physical location of the repository.
+// This might copy a default set of hooks or config files
+//
+// $post_create_script = "svn-update-config-files.bat";
+
+?>

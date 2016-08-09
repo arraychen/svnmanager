@@ -1,0 +1,103 @@
+March 16th 2014 (1.10)
+		MV: Security Fix (Thanks to Jakub Zoczek)
+		MV: Updated to work with VersionControl_SVN 0.51
+		 
+January 28th 2011 (1.09)
+		Ingemar Stock: Load option didn't work because of --config-dir option with svnadmin
+
+August 23th 2009 (1.08)
+		MV: svnadmin command hasn't got --svn-config parameter, that's why dump didn't work. Didn't test this, sorry! 
+
+August 9th 2009 (1.07)
+		Michael Fursov & MV: Location of '.subversion' config dir is specified in SVNManager's config now 
+							 to prevent use of wrongly set HOME dir in execution environment.
+
+July 9th 2009 (1.06) 
+		MV: I18N Configuration option added
+		Øystein Andres Krogsæter (OAK): Access file entries are sorted per path now      
+
+March 29th 2009 (1.05)
+		MV: Fixed undesirable behaviour with unicode characters in repository names on Unix machines
+		Steve King: Bugfix in DumpAnnouncePage, wrong port detection for download of dumped repository
+		MV: Added warning messages on failure of repository creation and deletion
+		Tyler Wilson (TW): Show repository name when asking if user is sure to delete repository. 
+	
+November 23rd 2008 (1.04)        
+        BF: SQLite linux config fix
+        Bernd Fritz (BF): Fixes for servers hosted at strange ports
+		Thomas Bergwinkl: Sorts on privilege listing (SQL adjustment)
+		GB & MV: Fix: Long descriptions where unnecessarily wrapped
+		Goodbyte (GB): Bugfix: Problematic protocol recognition with IIS 
+
+October 9th 2007 (1.03)
+		MV: Bugfix: Incorrect group and repository ownership transfer when user was deleted.    
+
+September 19th 2007 (1.02)
+		BK: Feature:	Added configuration variable that, when set, causes the "Remove" repository button to move the
+						repository to the specified location rather than deleting it.
+		MV: Fix:        'svnserve' parameter has been removed. This feature is now enabled by setting a value to 
+						the 'svnserve_user_file' parameter.       
+						
+September 17th 2007 (1.01)
+		MV & BK:	Moved the SQLite database file to the more secure svnmanager subdirectory in default config and included
+					warning messages about this in INSTALL and IMPORTANT text file.
+		MV: Fix:    Added a configuration option to enable or disable the svnserve mode, since this mode requires 
+					passwords to be stored readable in database.
+					
+September 16th 2007 (1.00)
+		Brad Kimmel (BK): Security fixes: Hardened SQL queries and shell commands against SQL and command line injection attacks, 
+		fixes against illegal page and directory access, and fixes against scripted phishing.
+
+August 8th (0.40)
+		Nicola Bern & MV: Bugfix: Error in SQL query in function that checks for existing repositories.
+
+July 23rd 2007 (0.39)
+		MV: Fix:  Database creation now automatic at first start of SVNManager
+		MV: Bugfix: User / Group Privilege removing didn't work correctly for non-admin users
+		MV & U. H�lscher: Bugfix: Password file wasn't updated on username change
+		MV: Bugfix: Whitespace in front of repository name caused unpleasant deletions (oops!)
+		MV: Fix: Repository dump was always offered on https protocol, even if not available.
+		
+April 10th	2006 (0.38)
+		MV: Bugfix: svnmanager didn't remove user privileges of removed users
+		
+February 21th 2006 (0.37)
+		P. Durden: Windows compatibility changes
+		MV: Added possibility to add user access privileges for all users (' *' )
+		MV: Update to Prado 2.0.3 (works with php 5.1.2)
+
+August 29th 2005 (0.36)
+		K. Drechsler (KD): Bug fix: SVNManager didn't delete removed users from htpassword list
+		MV: Bugfix: Reload / Dump / Recover didn't work because of using PATH_SEPARATOR instead of DIRECTORY_SEPARATOR
+		B. Wong (BW): htpassword is properly escaped now and password file uses MD5 instead of crypt()
+
+June 9th 2005 (0.35)
+		MV: Bug fixes
+
+June 1st 2005 (0.34)
+		MV: Updated Prado to version 2.0.1 (security)
+
+May 23th 2005 (0.33)
+		L. Largu�re (LL): limit repetition of sections [repo:path] in the generated policy-file
+							   Add ORDER BY clauses in some pages. 
+
+May 17th 2005 (0.32)
+		MV: Added repository recovery functionality
+
+May 4th 2005 (0.31)
+		MV: Bug fix: To Load Repositories didn't have effect on user's grants
+
+April 25th 2005 (0.3)
+		MV: Small changes / fixes
+		J. Verhoef (JV) & MV: Windows compatibility
+
+April 21th 2005 (0.21)
+		MV: Small bug fix
+
+April 20th 2005 (0.2)
+        MV: Name change to SVNManager
+        MV: Repository browsing for user / group access privileges
+		MV: Added logo
+
+April 4th 2005 (0.1)
+		M. Verkerk (MV): Initial release..

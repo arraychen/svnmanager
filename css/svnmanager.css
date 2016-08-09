@@ -1,0 +1,68 @@
+body{
+	background-color : #FFFFF8;
+	font-family : Arial, Helvetica, sans-serif;
+}
+
+a{
+	color : #006400;
+}
+
+a:hover{color : Maroon;}
+
+a.menu{
+	color : darkgreen;
+	background : lightgreen;
+}
+a.menu:hover{
+	color : white;
+	background  : lightgreen;
+}
+table.menu {
+	vertical-align : top
+	border: 1px solid teal;
+	color : lightblue;
+	background : lightgreen;
+}
+th.menu {
+	color: white;
+	background : lightgreen;
+}
+
+table.main {
+	border: 0px solid teal;
+	padding-right: 1cm;
+}
+td.main {
+	padding-top: 0cm;
+	padding-right: 1cm;
+}
+
+table.buttonmenu {
+	border: 0px solid teal;
+}
+
+table {
+	border: 1px solid teal;
+}
+th {
+	color: white;
+	background: teal;
+} 
+.altth {
+	color: white;
+	background: green;
+}
+
+.row1 {
+	background: #EEFFEE;
+}
+.row2 {
+	background: #FFFFFF;
+}
+.warning {
+	color: red;
+}
+
+.message {
+	color: green;
+}

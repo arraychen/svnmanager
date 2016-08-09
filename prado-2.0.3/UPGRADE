@@ -1,0 +1,70 @@
+       
+       PRADO v2.0.3  November 18, 2005
+Upgrade from v2.0.2
+=================
+As always, please copy the new /framework/js files into your /js directory as many have changed.
+
+Upgrade from v2.0.1
+=================
+
+For component users,
+-  If you intend to use the newly-added Tiny_MCE editor you must copy Tiny_MCE
+   from /framework/js/ to your application js directory.
+
+
+Upgrade from v1.7 and v1.7.1
+============================
+
+For component users,
+- If you used TTable control developed by nader in your application,
+  you may need to change the control name, because the new version includes
+  a control also named TTable (with different functionality).
+- If you used recursive parameter file inclusion feature, please note
+  that now a parameter file should be absolute or relative to the path
+  containing the including parameter file.
+- We have tagged the version number of prado_validator.js to 2.00 now.
+  Please overwrite your existing one with framework/js/prado_validator.js
+
+For Component developers,
+- If your component overrides TControl::addBody(), you need to change 
+  it to addParsedBody(). addBody() is no longer overridable. 
+  addParsedBody() will now be invoked when the template parser encounters
+  a component or a static text.
+- Note that control state synchronization is now done via addBody() 
+  instead of addChild().
+- Control viewstate maintenance is now based on container-containee 
+  relationship (previously it was based on parent-child relationship).
+
+
+Upgrade from v1.6
+=================
+
+For component users,
+- One of the major changes is the introduction of the new parent-child
+  relationship (the old one in v1.6 is renamed to container-containee
+  relationship). An immediate consequence is that, components declared 
+  in a template are all child components of the template owner.
+  So much shorter ID paths can be used to address those components. 
+  For example, $page->SubmitButton can be used to address a submit button 
+  contained within a form. In v1.6, this would require $page->Form->SubmitButton. 
+- Another seemingly significant change is about expression and statements 
+  special tags. In the new version, the context becomes the expression and 
+  statements component itself. In v1.6, the context is the template owner. 
+- In the new version, pradoGetApplication() replaces the old 
+  TApplication::getInstance(). This also affects the entry script file. 
+  Please see the included examples for more details. 
+- Now PRADO will not encode the user submitted data. Instead, TTextBox 
+  will encode the Text property before rendering. Be careful now when 
+  using the user submitted data to make database queries. Single quotes 
+  usually should be escaped. 
+- The format of the application specification file is also changed a 
+  little bit. Please check the included blog example for more detailed description.
+- A lot of properties are added to TComponent. To avoid name conflict,
+  TAdodb.User has been changed to TAdodb.Username. 
+
+For component developers,
+- be aware TControl::addBody() will synchronize the state
+  of the body control to the current page stage.
+- And TComponent::instantiateTemplate() will now invoke TComponent::initProperties()
+  at the end.
+

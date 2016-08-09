@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<xliff version="1.0">
+<!-- @author $Author: weizhuo $ -->
+<!-- @version $Id: messages.pl.xml,v 1.1 2004/12/29 22:27:47 weizhuo Exp $ -->
+<file orginal="Prado Translation Editor" source-language="EN" datatype="plaintext" date="2004-12-29T21:01:14Z">
+<body>
+
+<trans-unit id="1">
+<source>PRADO Translation Editor</source>
+<target>Edytor Tłumaczeń PRADO</target>
+</trans-unit>
+
+<trans-unit id="2">
+<source>Source:</source>
+<target>Źródło:</target>
+</trans-unit>
+
+<trans-unit id="3">
+<source>Type:</source>
+<target>Typ:</target>
+</trans-unit>
+
+<trans-unit id="4">
+<source>Catalogue:</source>
+<target>Katalog:</target>
+</trans-unit>
+
+<trans-unit id="5">
+<source>Original string</source>
+<target>Łańcuch orginalny</target>
+</trans-unit>
+
+<trans-unit id="6">
+<source>Translation</source>
+<target>Przekład</target>
+</trans-unit>
+
+<trans-unit id="7">
+<source>Copyrights 2005 Xiang Wei Zhuo. All right reserved.</source>
+<target>Copyrights 2005 Xiang Wei Zhuo. Wszelkie prawa zastrzeżone</target>
+</trans-unit>
+
+<trans-unit id="8">
+<source>Internationlization in PRADO</source>
+<target>Internacjonalizacja w PRADO</target>
+</trans-unit>
+
+<trans-unit id="9">
+<source>Update Translation</source>
+<target>Zaktualizuj Przekład</target>
+</trans-unit>
+
+<trans-unit id="10">
+<source>System error, unable to update translation.</source>
+<target>Błąd systemowy, nie można zaktualizwać przekładu.</target>
+</trans-unit>
+
+<trans-unit id="11">
+<source>Reload</source>
+<target>Odśwież</target>
+</trans-unit>
+</body>
+</file>
+</xliff>
