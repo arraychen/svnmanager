@@ -209,7 +209,7 @@ class GroupPrivilegesEditPage extends TPage
 		}
 
 		// Set up runtime options. 
-		$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ARRAY, 'svn_path' => $svn_cmd);
+		$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ARRAY, 'binaryPath' => $svn_cmd);
 		//Request list class from factory
 		$svn = VersionControl_SVN::factory(array('list'), $options);
 
